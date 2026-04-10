@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  action: MyString
+  changed_field: 
+  auditable: one
+  auditable_type: AuditLog
+
+two:
+  action: MyString
+  changed_field: 
+  auditable: two
+  auditable_type: AuditLog

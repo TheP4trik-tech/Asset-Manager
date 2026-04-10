@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  attacment_type: MyString
+  description: MyText
+  added_date: 2026-04-06
+  asset: one
+
+two:
+  attacment_type: MyString
+  description: MyText
+  added_date: 2026-04-06
+  asset: two
