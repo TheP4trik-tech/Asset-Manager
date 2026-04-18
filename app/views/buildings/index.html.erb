@@ -1,0 +1,86 @@
+<div class="min-h-screen" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+
+    <div class="mb-6">
+      <h1 class="text-2xl font-semibold text-white">Budovy</h1>
+      <p class="text-sm text-white/50 mt-1">Přehled všech budov v systému</p>
+    </div>
+
+    <%= search_form_for @q, model: Building, method: :get,
+                        html: { class: "mb-6 flex flex-col sm:flex-row gap-3 items-start sm:items-center" } do |f| %>
+
+      <div class="flex-1 w-full sm:max-w-xs">
+        <%= f.label :name_cont, "Hledat podle názvu", class: "sr-only" %>
+        <%= f.text_field :name_cont,
+                         placeholder: "Hledat podle názvu…",
+                         class: "w-full px-4 py-2 rounded-lg bg-white/10 border border-white/15
+                      text-white placeholder-white/40 text-sm
+                      focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60 focus:border-[#7F77DD]
+                      transition-colors" %>
+      </div>
+
+      <%= f.submit "Hledat",
+                   class: "px-4 py-2 rounded-lg bg-[#7F77DD] hover:bg-[#6c64c8] text-white
+                    text-sm font-medium transition-colors cursor-pointer" %>
+    <% end %>
+
+    <div class="overflow-x-auto rounded-xl border border-white/10">
+      <table class="min-w-full text-sm">
+
+        <thead>
+        <tr style="background: rgba(255,255,255,0.07);">
+          <th class="px-4 py-3 text-left text-xs font-semibold text-white/50 uppercase tracking-wider whitespace-nowrap"><%= sort_link(@q, :name, 'NÁZEV') %></th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-white/50 uppercase tracking-wider whitespace-nowrap"><%= sort_link(@q, :code, 'kód') %></th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-white/50 uppercase tracking-wider whitespace-nowrap hidden sm:table-cell"><%= sort_link(@q, :contact_email, 'e-mail') %></th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-white/50 uppercase tracking-wider whitespace-nowrap hidden sm:table-cell"><%= sort_link(@q, :contact_phone, 'telefon') %></th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-white/50 uppercase tracking-wider whitespace-nowrap hidden md:table-cell"><%= sort_link(@q, :city, 'město') %></th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-white/50 uppercase tracking-wider whitespace-nowrap hidden lg:table-cell"><%= sort_link(@q, :street, 'ulice') %></th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-white/50 uppercase tracking-wider whitespace-nowrap hidden lg:table-cell"><%= sort_link(@q, :building_date, 'Datum budovy') %></th>
+        </tr>
+        </thead>
+
+        <tbody class="divide-y divide-white/5">
+        <% if @buildings.any? %>
+          <% @buildings.each do |building| %>
+            <tr class="hover:bg-white/5 transition-colors group cursor-pointer"
+                onclick="window.location='<%= building_path(building) %>'">
+              <td class="px-4 py-3 text-white font-medium whitespace-nowrap">
+                <%= building.name %>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                  <span class="inline-block px-2 py-0.5 rounded-md bg-[#7F77DD]/20 text-[#a9a4ed] font-mono text-xs tracking-wide">
+                    <%= building.code %>
+                  </span>
+              </td>
+              <td class="px-4 py-3 text-white/70 whitespace-nowrap hidden sm:table-cell">
+                <%= building.contact_email %>
+              </td>
+              <td class="px-4 py-3 text-white/70 whitespace-nowrap hidden sm:table-cell">
+                <%= building.contact_phone %>
+              </td>
+              <td class="px-4 py-3 text-white/70 whitespace-nowrap hidden md:table-cell">
+                <%= building.city.presence || "—" %>
+              </td>
+              <td class="px-4 py-3 text-white/70 whitespace-nowrap hidden lg:table-cell">
+                <%= building.street.presence || "—" %>
+              </td>
+              <td class="px-4 py-3 text-white/70 whitespace-nowrap hidden lg:table-cell">
+                <%= building.building_date.strftime("%d. %m. %Y")%>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="7" class="px-4 py-12 text-center text-white/40 text-sm">
+              Žádné budovy nebyly nalezeny.
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+
+      </table>
+    </div>
+
+  </div>
+</div>

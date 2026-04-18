@@ -1,0 +1,88 @@
+<%= form_with(model: @building, class: "flex flex-col", data: { turbo: false }) do |f| %>
+
+  <% if @building.errors.any? %>
+    <div class="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20">
+      <h3 class="text-sm font-medium text-red-400 mb-2"><%= @building.errors.count %> chyb zabránilo uložení:</h3>
+      <ul class="text-sm text-red-400/80 list-disc list-inside">
+        <% @building.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+
+    <div class="lg:col-span-2 rounded-xl border border-white/10 overflow-hidden h-fit">
+      <div style="background: rgba(255,255,255,0.07);" class="px-5 py-3 border-b border-white/10">
+        <h2 class="text-sm font-semibold text-white/70 uppercase tracking-wider">Základní informace</h2>
+      </div>
+      <div class="divide-y divide-white/5">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-white/5">
+          <div class="px-5 py-4">
+            <%= f.label :name, "Název", class: "block text-xs text-white/40 mb-2" %>
+            <%= f.text_field :name, class: "w-full px-3 py-2 rounded-md bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-[#7F77DD] focus:ring-1 focus:ring-[#7F77DD] transition-colors" %>
+          </div>
+          <div class="px-5 py-4">
+            <%= f.label :building_date, "Datum vytvoření budovy", class: "block text-xs text-white/40 mb-2" %>
+            <%= f.date_field :building_date, class: "w-full px-3 py-2 rounded-md bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-[#7F77DD] focus:ring-1 focus:ring-[#7F77DD] transition-colors [&::-webkit-calendar-picker-indicator]:invert-[0.6]" %>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-white/5">
+          <div class="px-5 py-4">
+            <%= f.label :contact_email, "Kontaktní e-mail", class: "block text-xs text-white/40 mb-2" %>
+            <%= f.email_field :contact_email, class: "w-full px-3 py-2 rounded-md bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-[#7F77DD] focus:ring-1 focus:ring-[#7F77DD] transition-colors" %>
+          </div>
+          <div class="px-5 py-4">
+            <%= f.label :contact_phone, "Kontaktní telefon", class: "block text-xs text-white/40 mb-2" %>
+            <%= f.telephone_field :contact_phone, class: "w-full px-3 py-2 rounded-md bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-[#7F77DD] focus:ring-1 focus:ring-[#7F77DD] transition-colors" %>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-6">
+      <div class="rounded-xl border border-white/10 overflow-hidden h-fit">
+        <div style="background: rgba(255,255,255,0.07);" class="px-5 py-3 border-b border-white/10">
+          <h2 class="text-sm font-semibold text-white/70 uppercase tracking-wider">Adresa</h2>
+        </div>
+        <div class="divide-y divide-white/5">
+          <div class="px-5 py-4">
+            <%= f.label :street, "Ulice", class: "block text-xs text-white/40 mb-2" %>
+            <%= f.text_field :street, class: "w-full px-3 py-2 rounded-md bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-[#7F77DD] focus:ring-1 focus:ring-[#7F77DD] transition-colors" %>
+          </div>
+          <div class="px-5 py-4">
+            <%= f.label :city, "Město", class: "block text-xs text-white/40 mb-2" %>
+            <%= f.text_field :city, class: "w-full px-3 py-2 rounded-md bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-[#7F77DD] focus:ring-1 focus:ring-[#7F77DD] transition-colors" %>
+          </div>
+          <div class="px-5 py-4">
+            <%= f.label :zip_code, "PSČ", class: "block text-xs text-white/40 mb-2" %>
+            <%= f.text_field :zip_code, class: "w-full px-3 py-2 rounded-md bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-[#7F77DD] focus:ring-1 focus:ring-[#7F77DD] transition-colors" %>
+          </div>
+        </div>
+      </div>
+
+      <% if can? :manage, User %>
+        <div class="rounded-xl border border-[#7F77DD]/30 overflow-hidden bg-[#7F77DD]/5 h-fit">
+          <div style="background: rgba(127,119,221,0.1);" class="px-5 py-3 border-b border-[#7F77DD]/20">
+            <h2 class="text-sm font-semibold text-[#a9a4ed] uppercase tracking-wider">Správce budovy</h2>
+          </div>
+          <div class="px-5 py-4">
+            <%= f.label :user_id, "Přiřadit správce", class: "block text-xs text-[#a9a4ed]/70 mb-2" %>
+            <%= f.collection_select :user_id, User.all, :to_s, { prompt: "Vyberte správce..." }, class: "w-full px-3 py-2 rounded-md bg-black/20 border border-[#7F77DD]/30 text-white text-sm focus:outline-none focus:border-[#7F77DD] focus:ring-1 focus:ring-[#7F77DD] transition-colors [&>option]:bg-[#1a1a2e]" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+
+  <div class="flex items-center justify-end gap-4 border-t border-white/10 pt-6">
+    <%= link_to "Zrušit", buildings_path, class: "px-4 py-2 rounded-lg text-sm font-medium text-white/40 hover:text-white hover:bg-white/5 transition-colors" %>
+    <%= f.submit @building.new_record? ? "Vytvořit budovu" : "Uložit změny", class: "px-6 py-2 rounded-lg bg-[#7F77DD] hover:bg-[#6c64c8] text-white text-sm font-medium transition-colors cursor-pointer shadow-lg shadow-[#7F77DD]/20" %>
+  </div>
+
+<% end %>

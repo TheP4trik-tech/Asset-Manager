@@ -1,0 +1,9 @@
+cs:
+  activerecord:
+    attributes:
+      user:
+        email: "E-mail"
+        password: "Heslo"
+        first_name: "Jméno"
+        last_name: "Příjmení"
+        phone: "Telefon"

@@ -1,0 +1,79 @@
+<div class="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+  <div class="w-full max-w-sm">
+    <div class="rounded-2xl overflow-hidden shadow-sm border border-gray-200">
+
+      <div class="px-6 pt-6 pb-5" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+        <div class="flex gap-1 mb-4">
+          <div class="w-1.5 h-1.5 rounded-full bg-white/20"></div>
+          <div class="w-1.5 h-1.5 rounded-full bg-[#7F77DD]"></div>
+          <div class="w-1.5 h-1.5 rounded-full bg-white/20"></div>
+        </div>
+        <h2 class="text-xl font-medium text-white mb-1">Vytvořit účet</h2>
+        <p class="text-sm text-white/40">Přidejte se k systému evidence</p>
+      </div>
+
+      <div class="bg-white px-6 py-6">
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+          <%= render "devise/shared/error_messages", resource: resource %>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+            <div>
+              <%= f.label :first_name, "Jméno", class: "block text-xs font-medium text-gray-500 mb-1.5" %>
+              <%= f.text_field :first_name,
+                               class: "w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/30 focus:border-[#7F77DD]",
+                               placeholder: "Jan" %>
+            </div>
+            <div>
+              <%= f.label :last_name, "Příjmení", class: "block text-xs font-medium text-gray-500 mb-1.5" %>
+              <%= f.text_field :last_name,
+                               class: "w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/30 focus:border-[#7F77DD]",
+                               placeholder: "Novák" %>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :email, "E-mail", class: "block text-xs font-medium text-gray-500 mb-1.5" %>
+            <%= f.email_field :email, autofocus: true, autocomplete: "email",
+                              class: "w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/30 focus:border-[#7F77DD]",
+                              placeholder: "jan@firma.cz" %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :phone, class: "block text-xs font-medium text-gray-500 mb-1.5" do %>
+              Telefon <span class="font-normal opacity-50">— volitelné</span>
+            <% end %>
+            <%= f.telephone_field :phone,
+                                  class: "w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/30 focus:border-[#7F77DD]",
+                                  placeholder: "+420 ..." %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :password, "Heslo", class: "block text-xs font-medium text-gray-500 mb-1.5" %>
+            <% if @minimum_password_length %>
+              <p class="text-xs text-gray-400 mb-1">minimálně <%= @minimum_password_length %> znaků</p>
+            <% end %>
+            <%= f.password_field :password, autocomplete: "new-password",
+                                 class: "w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/30 focus:border-[#7F77DD]",
+                                 placeholder: "••••••••" %>
+          </div>
+
+          <div class="mb-5">
+            <%= f.label :password_confirmation, "Potvrzení hesla", class: "block text-xs font-medium text-gray-500 mb-1.5" %>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password",
+                                 class: "w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/30 focus:border-[#7F77DD]",
+                                 placeholder: "••••••••" %>
+          </div>
+
+          <%= f.submit "Vytvořit účet →",
+                       class: "w-full bg-[#1a1a1a] hover:bg-black text-white text-sm font-medium rounded-xl py-2.5 transition-colors cursor-pointer" %>
+
+        <% end %>
+
+        <div class="mt-4 text-xs text-gray-400 text-center [&_a]:text-[#7F77DD] [&_a]:hover:underline space-y-1">
+          <%= render "devise/shared/links" %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

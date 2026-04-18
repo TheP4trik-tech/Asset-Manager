@@ -8,6 +8,16 @@ Bundler.require(*Rails.groups)
 
 module Prr2ApiProject
   class Application < Rails::Application
+    # Source - https://stackoverflow.com/a/64640285
+    # Posted by Aboozar Rajabi
+    # Retrieved 2026-04-11, License - CC BY-SA 4.0
+
+
+    I18n.load_path += Dir[File.expand_path("config/locales") + "/*.yml"]
+    I18n.default_locale = :cs # (note that `en` is already the default!)
+
+
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.1
 
@@ -27,6 +37,7 @@ module Prr2ApiProject
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
-    config.api_only = true
+    config.api_only = false
+
   end
 end

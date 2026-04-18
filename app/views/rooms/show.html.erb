@@ -1,0 +1,150 @@
+<div class="min-h-screen" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <div class="flex items-center gap-2 mb-6 text-sm text-white/40">
+      <%= link_to "Budovy", buildings_path, class: "hover:text-white transition-colors" %>
+      <span>/</span>
+      <%= link_to @room.building.name, building_path(@room.building), class: "hover:text-white transition-colors" %>
+      <span>/</span>
+      <span class="text-white/70"><%= @room.name %></span>
+    </div>
+
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+      <div>
+        <div class="flex items-center gap-3 mb-1">
+          <h1 class="text-2xl font-semibold text-white"><%= @room.name %></h1>
+          <span class="inline-block px-2 py-0.5 rounded-md bg-[#7F77DD]/20 text-[#a9a4ed] font-mono text-xs tracking-wide">
+            <%= @room.code %>
+          </span>
+        </div>
+        <p class="text-sm text-white/50">Detail místnosti</p>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <% if can? :update, @room %>
+          <%= link_to "Upravit", edit_room_path(@room),
+                      class: "px-4 py-2 rounded-lg bg-[#7F77DD] hover:bg-[#6c64c8] text-white text-sm font-medium transition-colors" %>
+        <% end %>
+        <% if can? :destroy, @room %>
+          <%= button_to "Smazat", room_path(@room), method: :delete,
+                        data: { confirm: "Opravdu chcete smazat tuto místnost?" },
+                        class: "px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-400 text-sm font-medium transition-colors cursor-pointer" %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+
+      <div class="lg:col-span-2 rounded-xl border border-white/10 overflow-hidden">
+        <div style="background: rgba(255,255,255,0.07);" class="px-5 py-3 border-b border-white/10">
+          <h2 class="text-sm font-semibold text-white/70 uppercase tracking-wider">Základní informace</h2>
+        </div>
+        <div class="divide-y divide-white/5">
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-white/5">
+            <div class="px-5 py-4">
+              <p class="text-xs text-white/40 mb-1">Název místnosti</p>
+              <p class="text-sm text-white font-medium"><%= @room.name %></p>
+            </div>
+            <div class="px-5 py-4">
+              <p class="text-xs text-white/40 mb-1">Kód</p>
+              <p class="text-sm font-mono text-[#a9a4ed]"><%= @room.code %></p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-white/5">
+            <div class="px-5 py-4">
+              <p class="text-xs text-white/40 mb-1">Datum vytvoření místnosti</p>
+              <p class="text-sm text-white"><%= @room.room_date.strftime("%d. %m. %Y") %></p>
+            </div>
+            <div class="px-5 py-4">
+              <p class="text-xs text-white/40 mb-1">Celková hodnota majetku</p>
+              <p class="text-sm font-medium text-[#a9a4ed]">
+                <%= @room.assets.any? ?  @room.assets.sum(:purchase_price).to_s + "KČ" : "Bez majetku" %>
+
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="rounded-xl border border-white/10 overflow-hidden h-fit">
+        <div style="background: rgba(255,255,255,0.07);" class="px-5 py-3 border-b border-white/10">
+          <h2 class="text-sm font-semibold text-white/70 uppercase tracking-wider">Zařazení v budově</h2>
+        </div>
+        <div class="divide-y divide-white/5">
+          <div class="px-5 py-4">
+            <p class="text-xs text-white/40 mb-1">Budova</p>
+            <p class="text-sm text-white font-medium"><%= @room.building.name %></p>
+          </div>
+          <div class="px-5 py-4">
+            <p class="text-xs text-white/40 mb-1">Kód budovy</p>
+            <p class="text-sm font-mono text-white/70"><%= @room.building.code %></p>
+          </div>
+          <div class="px-5 py-4">
+            <p class="text-xs text-white/40 mb-1">Adresa budovy</p>
+            <p class="text-sm text-white/70">
+              <%= @room.building.street.presence || "—" %>, <%= @room.building.city.presence || "—" %>
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="rounded-xl border border-white/10 overflow-hidden">
+      <div style="background: rgba(255,255,255,0.07);" class="px-5 py-3 border-b border-white/10 flex items-center justify-between">
+        <h2 class="text-sm font-semibold text-white/70 uppercase tracking-wider">Evidovaný majetek</h2>
+        <span class="text-xs text-white/40"><%= @room.assets.count %> položek</span>
+      </div>
+
+      <% if @room.assets.any? %>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm">
+            <thead>
+            <tr style="background: rgba(255,255,255,0.04);">
+              <th class="px-4 py-3 text-left text-xs font-semibold text-white/40 uppercase tracking-wider">Název položky</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-white/40 uppercase tracking-wider">Kód</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-white/40 uppercase tracking-wider hidden sm:table-cell">Datum pořízení</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-white/40 uppercase tracking-wider hidden md:table-cell">Poslední kontrola</th>
+              <th class="px-4 py-3 text-right text-xs font-semibold text-white/40 uppercase tracking-wider">Cena</th>
+              <th class="px-4 py-3"></th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5">
+            <% @room.assets.each do |asset| %>
+              <tr class="hover:bg-white/5 transition-colors group cursor-pointer"
+                  onclick="window.location='<%= asset_path(asset) %>'">
+                  <td class="px-4 py-3 text-white font-medium whitespace-nowrap"><%= asset.name %></td>
+                  <td class="px-4 py-3 whitespace-nowrap">
+                    <span class="inline-block px-2 py-0.5 rounded-md bg-[#7F77DD]/20 text-[#a9a4ed] font-mono text-xs tracking-wide">
+                      <%= asset.code %>
+                    </span>
+                  </td>
+                  <td class="px-4 py-3 text-white/60 whitespace-nowrap hidden sm:table-cell">
+                    <%= asset.purchase_date.strftime("%d. %m. %Y")%>
+                  </td>
+                  <td class="px-4 py-3 text-white/60 whitespace-nowrap hidden md:table-cell">
+                    <%= asset.last_check_date.strftime("%d. %m. %Y") %>
+                  </td>
+                  <td class="px-4 py-3 text-right text-white/80 whitespace-nowrap">
+                    <%= asset.purchase_price ? asset.purchase_price.to_s + "KČ" : "" %>
+                  </td>
+                  <td class="px-4 py-3 text-right whitespace-nowrap">
+                    <%= link_to "Detail →", asset_path(asset), class: "text-xs text-[#7F77DD] hover:underline" %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="px-5 py-12 text-center text-white/40 text-sm">
+          V této místnosti není evidován žádný majetek.
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</div>

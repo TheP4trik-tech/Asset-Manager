@@ -1,0 +1,56 @@
+<div class="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+  <div class="w-full max-w-sm">
+    <div class="rounded-2xl overflow-hidden shadow-sm border border-gray-200">
+
+      <div class="px-6 pt-6 pb-5" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+        <div class="flex gap-1 mb-4">
+          <div class="w-1.5 h-1.5 rounded-full bg-white/20"></div>
+          <div class="w-1.5 h-1.5 rounded-full bg-[#7F77DD]"></div>
+          <div class="w-1.5 h-1.5 rounded-full bg-white/20"></div>
+        </div>
+        <h2 class="text-xl font-medium text-white mb-1">Přihlásit se</h2>
+        <p class="text-sm text-white/40">Přihlaste se do svého účtu</p>
+      </div>
+
+      <div class="bg-white px-6 py-6">
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+
+          <% if alert.present? %>
+            <div class="mb-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+              <%= alert %>
+            </div>
+          <% end %>
+
+          <div class="mb-3">
+            <%= f.label :email, "E-mail", class: "block text-xs font-medium text-gray-500 mb-1.5" %>
+            <%= f.email_field :email, autofocus: true, autocomplete: "email",
+                              class: "w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/30 focus:border-[#7F77DD]",
+                              placeholder: "vase@firma.cz" %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.password_field :password, autocomplete: "current-password",
+                                 class: "w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/30 focus:border-[#7F77DD]",
+                                 placeholder: "••••••••" %>
+          </div>
+
+          <% if devise_mapping.rememberable? %>
+            <div class="flex items-center gap-2 mb-5">
+              <%= f.check_box :remember_me, class: "w-4 h-4 rounded border-gray-300 text-[#7F77DD]" %>
+              <%= f.label :remember_me, "Zapamatovat si mě", class: "text-xs text-gray-500" %>
+            </div>
+          <% end %>
+
+          <%= f.submit "Přihlásit se →",
+                       class: "w-full bg-[#1a1a1a] hover:bg-black text-white text-sm font-medium rounded-xl py-2.5 transition-colors cursor-pointer" %>
+
+        <% end %>
+
+        <div class="mt-4 text-xs text-gray-400 text-center [&_a]:text-[#7F77DD] [&_a]:hover:underline space-y-1">
+          <%= render "devise/shared/links" %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

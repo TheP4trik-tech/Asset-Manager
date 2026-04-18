@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_10_183108) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_12_114106) do
   create_table "assets", force: :cascade do |t|
     t.string "code", null: false
     t.datetime "created_at", null: false
@@ -47,21 +47,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_10_183108) do
     t.index ["user_id"], name: "index_audit_logs_on_user_id"
   end
 
-  create_table "buildings", force: :cascade do |t|
-    t.date "building_date", null: false
-    t.string "city"
-    t.string "code", null: false
-    t.string "contact_email", null: false
-    t.string "contact_phone", null: false
-    t.datetime "created_at", null: false
-    t.string "name", null: false
-    t.string "street"
-    t.datetime "updated_at", null: false
-    t.integer "user_id", null: false
-    t.string "zip_code"
-    t.index ["code"], name: "index_buildings_on_code"
-    t.index ["user_id"], name: "index_buildings_on_user_id"
-  end
+    create_table "buildings", force: :cascade do |t|
+      t.date "building_date", null: false
+      t.string "city"
+      t.string "code", null: false
+      t.string "contact_email", null: false
+      t.string "contact_phone", null: false
+      t.datetime "created_at", null: false
+      t.string "name", null: false
+      t.string "street"
+      t.datetime "updated_at", null: false
+      t.integer "user_id",  null: false
+      t.string "zip_code"
+      t.index ["code"], name: "index_buildings_on_code"
+      t.index ["user_id"], name: "index_buildings_on_user_id"
+    end
 
   create_table "rooms", force: :cascade do |t|
     t.integer "building_id", null: false
@@ -79,12 +79,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_10_183108) do
     t.string "code", null: false
     t.datetime "created_at", null: false
     t.string "email", null: false
+    t.string "encrypted_password", default: "", null: false
     t.string "first_name", null: false
     t.string "last_name", null: false
     t.string "phone"
-    t.string "role", default: "user", null: false
+    t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at"
+    t.string "reset_password_token"
+    t.string "role", default: "reader", null: false
     t.datetime "updated_at", null: false
     t.index ["code"], name: "index_users_on_code"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "assets", "rooms"

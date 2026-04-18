@@ -1,5 +1,5 @@
 module DateValidator
-extend ActiveSupport::Concern
+  extend ActiveSupport::Concern
 
 private
 def date_not_in_future?(attribute)
