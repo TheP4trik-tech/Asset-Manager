@@ -13,9 +13,11 @@ class Ability
     end
 
     if user.admin?
-    can :manage, Building, user_id: user.id
+    can [:read, :update], Building, user_id: user.id
     can :manage, Room, building: {user_id: user.id}
+    can :create, Asset
     can :manage, Asset,room: {building: {user_id: user.id }}
+
     end
 
     if user.super_admin?

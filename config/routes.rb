@@ -11,7 +11,8 @@ Rails.application.routes.draw do
       end
   end
 
-  resources :users, :assets, :buildings, :rooms
+  resources :users, :buildings, :rooms
+  resources :assets, path: "assets_mng"
   root "users#index"
 
   # Defines the root path route ("/")

@@ -129,7 +129,7 @@
                     <%= asset.last_check_date.strftime("%d. %m. %Y") %>
                   </td>
                   <td class="px-4 py-3 text-right text-white/80 whitespace-nowrap">
-                    <%= asset.purchase_price ? asset.purchase_price.to_s + "KČ" : "" %>
+                    <%= asset.purchase_price ? asset.purchase_price.to_s + "KČ" : "-" %>
                   </td>
                   <td class="px-4 py-3 text-right whitespace-nowrap">
                     <%= link_to "Detail →", asset_path(asset), class: "text-xs text-[#7F77DD] hover:underline" %>

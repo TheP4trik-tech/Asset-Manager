@@ -14,11 +14,11 @@ class Room < ApplicationRecord
   before_validation :generate_code, on: :create
 
   def self.ransackable_attributes(auth_object = nil)
-    ["room_date", "name", "code", "assets_sum"]
+    ["room_date", "name", "code", "purchase_date", "last_check_date"]
   end
 
   def self.ransackable_associations(auth_object = nil)
-    ["building", "assets", "purchase_price"]
+    ["building", "room"]
   end
 
   ransacker :assets_sum do

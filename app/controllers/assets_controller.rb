@@ -6,12 +6,15 @@ class AssetsController < ApplicationController
     @asset = Asset.find(params[:id])
   end
   def index
-    @assets = Asset.all
+    @q = Asset.ransack(params[:q])
+    @assets = @q.result(distinct: true)
   end
   def new
     @asset = Asset.new
+    properties_for_current_user
   end
   def create
+    properties_for_current_user
     @asset = Asset.new(asset_params)
     if @asset.save
       redirect_to @asset
@@ -21,6 +24,8 @@ class AssetsController < ApplicationController
   end
   def edit
     @asset = Asset.find(params[:id])
+    properties_for_current_user
+
   end
   def update
     @asset = Asset.find(params[:id])
@@ -38,6 +43,17 @@ class AssetsController < ApplicationController
 
   private
   def asset_params
-    params.require(:asset).permit(:name, :description, :image, :building_id)
+    params.require(:asset).permit(:name, :room_id, :purchase_date, :last_check_date, :purchase_price, :note)
+  end
+
+  def properties_for_current_user
+    if current_user.super_admin?
+      @rooms = Room.all.includes(:building)
+      @buildings = Building.all
+    elsif current_user.admin?
+      @buildings = current_user.buildings
+      @rooms = Room.where(building_id: @buildings).includes(:building)
+
+    end
   end
 end

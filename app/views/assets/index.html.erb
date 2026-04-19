@@ -1,0 +1,124 @@
+<div class="min-h-screen" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h1 class="text-2xl font-semibold text-white">Majetek</h1>
+        <p class="text-sm text-white/50 mt-1">Kompletní přehled veškerého evidovaného majetku</p>
+      </div>
+      <% if can? :create, Asset %>
+        <%= link_to "+ Přidat majetek", new_asset_path,
+                    class: "px-4 py-2 rounded-lg bg-[#7F77DD] hover:bg-[#6c64c8] text-white text-sm font-medium transition-colors" %>
+      <% end %>
+    </div>
+
+    <%= search_form_for @q, class: "mb-6 flex flex-col gap-4" do |f| %>
+      <div class="flex flex-col sm:flex-row gap-3 w-full">
+        <div class="flex-1 w-full">
+          <%= f.text_field :name_or_code_or_note_cont,
+                           placeholder: "Hledat majetek (název, poznámka,nebo kód)...",
+                           class: "w-full px-4 py-2 rounded-lg bg-white/10 border border-white/15 text-white placeholder-white/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60 focus:border-[#7F77DD] transition-colors" %>
+        </div>
+        <div class="flex gap-2 w-full sm:w-auto">
+          <%= f.submit "Hledat", class: "flex-1 sm:flex-none px-6 py-2 rounded-lg bg-[#7F77DD] hover:bg-[#6c64c8] text-white text-sm font-medium transition-colors cursor-pointer" %>
+          <%= link_to "Vyčistit", assets_path, class: "flex-1 sm:flex-none px-4 py-2 text-center rounded-lg bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-sm font-medium transition-colors" %>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-5 rounded-xl bg-white/5 border border-white/10">
+
+        <div>
+          <label class="block text-xs font-medium text-white/50 uppercase tracking-wider mb-2">Pořizovací cena (Kč)</label>
+          <div class="flex items-center gap-2">
+            <%= f.number_field :purchase_price_gteq, placeholder: "Od", class: "w-full px-4 py-2 rounded-lg bg-white/10 border border-white/15 text-white placeholder-white/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60 focus:border-[#7F77DD] transition-colors" %>
+            <span class="text-white/30">-</span>
+            <%= f.number_field :purchase_price_lteq, placeholder: "Do", class: "w-full px-4 py-2 rounded-lg bg-white/10 border border-white/15 text-white placeholder-white/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60 focus:border-[#7F77DD] transition-colors" %>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-white/50 uppercase tracking-wider mb-2">Datum pořízení</label>
+          <div class="flex items-center gap-2">
+            <%= f.date_field :purchase_date_gteq, class: "w-full px-4 py-2 rounded-lg bg-white/10 border border-white/15 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60 focus:border-[#7F77DD] transition-colors [&::-webkit-calendar-picker-indicator]:invert-[0.6]" %>
+            <span class="text-white/30">-</span>
+            <%= f.date_field :purchase_date_lteq, class: "w-full px-4 py-2 rounded-lg bg-white/10 border border-white/15 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60 focus:border-[#7F77DD] transition-colors [&::-webkit-calendar-picker-indicator]:invert-[0.6]" %>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-white/50 uppercase tracking-wider mb-2">Poslední kontrola</label>
+          <div class="flex items-center gap-2">
+            <%= f.date_field :last_check_date_gteq, class: "w-full px-4 py-2 rounded-lg bg-white/10 border border-white/15 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60 focus:border-[#7F77DD] transition-colors [&::-webkit-calendar-picker-indicator]:invert-[0.6]" %>
+            <span class="text-white/30">-</span>
+            <%= f.date_field :last_check_date_lteq, class: "w-full px-4 py-2 rounded-lg bg-white/10 border border-white/15 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60 focus:border-[#7F77DD] transition-colors [&::-webkit-calendar-picker-indicator]:invert-[0.6]" %>
+          </div>
+        </div>
+
+      </div>
+    <% end %>
+
+    <div class="overflow-x-auto rounded-xl border border-white/10">
+      <table class="min-w-full text-sm">
+        <thead>
+        <tr style="background: rgba(255,255,255,0.07);">
+          <th class="px-4 py-3 text-left text-xs font-semibold text-white/50 uppercase tracking-wider"><%= sort_link(@q, :name, 'název') %></th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-white/50 uppercase tracking-wider"><%= sort_link(@q, :code, 'kód') %></th>
+          <th class="px-4 py-3 text-right text-xs font-semibold text-white/50 uppercase tracking-wider"><%= sort_link(@q, :purchase_price, 'cena') %></th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-white/50 uppercase tracking-wider hidden sm:table-cell"><%= sort_link(@q, :room_name, 'místnost') %></th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-white/50 uppercase tracking-wider hidden md:table-cell"><%= sort_link(@q, :room_building_name, 'budova') %></th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-white/50 uppercase tracking-wider hidden lg:table-cell"><%= sort_link(@q, :purchase_date, 'datum pořízení') %></th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-white/50 uppercase tracking-wider hidden xl:table-cell"><%= sort_link(@q, :last_check_date, 'posl. kontrola') %></th>
+        </tr>
+        </thead>
+
+        <tbody class="divide-y divide-white/5">
+        <% if @assets.any? %>
+          <% @assets.each do |asset| %>
+            <tr class="hover:bg-white/5 transition-colors group cursor-pointer"
+                onclick="window.location='<%= asset_path(asset) %>'">
+
+              <td class="px-4 py-3 text-white font-medium whitespace-nowrap">
+                <%= asset.name %>
+              </td>
+
+              <td class="px-4 py-3 whitespace-nowrap">
+                  <span class="inline-block px-2 py-0.5 rounded-md bg-[#7F77DD]/20 text-[#a9a4ed] font-mono text-xs tracking-wide">
+                    <%= asset.code %>
+                  </span>
+              </td>
+
+              <td class="px-4 py-3 text-right whitespace-nowrap font-medium text-[#a9a4ed]">
+                <%= asset.purchase_price ? "#{number_with_delimiter(asset.purchase_price.to_i, delimiter: ' ')} Kč" : "—" %>
+              </td>
+
+              <td class="px-4 py-3 text-white/70 whitespace-nowrap hidden sm:table-cell">
+                <%= asset.room.name %>
+              </td>
+
+              <td class="px-4 py-3 text-white/70 whitespace-nowrap hidden md:table-cell">
+                <%= asset.room.building.name %>
+              </td>
+
+              <td class="px-4 py-3 text-white/60 whitespace-nowrap hidden lg:table-cell">
+                <%= asset.purchase_date&.strftime("%d. %m. %Y") || "—" %>
+              </td>
+
+              <td class="px-4 py-3 text-white/60 whitespace-nowrap hidden xl:table-cell">
+                <%= asset.last_check_date&.strftime("%d. %m. %Y") || "—" %>
+              </td>
+
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="7" class="px-4 py-12 text-center text-white/40 text-sm">
+              Žádný majetek nebyl nalezen.
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

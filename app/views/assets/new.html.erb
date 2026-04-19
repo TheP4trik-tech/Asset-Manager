@@ -1,0 +1,20 @@
+<div class="min-h-screen" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <div class="flex items-center gap-2 mb-6 text-sm text-white/40">
+      <%= link_to "Majetek", assets_path, class: "hover:text-white transition-colors" %>
+      <span>/</span>
+      <span class="text-white/70">Nový majetek</span>
+    </div>
+
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+      <div>
+        <h1 class="text-2xl font-semibold text-white">Nový majetek</h1>
+        <p class="text-sm text-white/50">Vytvoření nového záznamu</p>
+      </div>
+    </div>
+
+    <%= render 'form_new' %>
+
+  </div>
+</div>

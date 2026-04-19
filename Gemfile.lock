@@ -447,7 +447,7 @@ DEPENDENCIES
   solid_cache
   solid_queue
   sqlite3 (>= 2.1)
-  stimulus-rails
+  stimulus-rails (~> 1.2, >= 1.2.1)
   tailwindcss-rails (~> 4.4)
   thruster
   turbo-rails

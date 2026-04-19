@@ -40,6 +40,7 @@ gem 'i18n', '~> 1.14', '>= 1.14.8'
 gem 'devise-i18n'
 gem 'cancancan', '~> 3.5'
 gem 'ransack'
+gem 'stimulus-rails', '~> 1.2', '>= 1.2.1'
 
 
 group :development, :test do
@@ -48,7 +49,6 @@ group :development, :test do
   gem "factory_bot_rails"
 
   gem "turbo-rails"
-  gem "stimulus-rails"
   gem "importmap-rails"
   gem "propshaft"
   gem "tailwindcss-rails", "~> 4.4"
