@@ -1,5 +1,7 @@
   class Asset < ApplicationRecord
-    include DateValidator, CodeGenerator
+
+
+    include DateValidator, CodeGenerator, Auditable
 
     belongs_to :room
     has_many :attachments, dependent: :destroy
@@ -28,6 +30,5 @@
     def self.ransackable_associations(auth_object = nil)
       ["building", "assets", "purchase_price"]
     end
-
 
   end

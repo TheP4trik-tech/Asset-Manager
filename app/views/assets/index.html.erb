@@ -1,6 +1,16 @@
 <div class="min-h-screen" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
+    <div class="flex items-center gap-4 mb-6 justify-end">
+      <%= link_to 'Exportovat', export_assets_path(q: @search_params), class: "px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition" %>
+      <% if @export_ready %>
+
+          <a href="/exports/majetek.csv" download class="px-4 py-2 rounded-lg bg-green-500/20 hover:bg-green-500/30 text-green-300 text-sm font-medium transition-colors">
+            ⬇ Stáhnout
+          </a>
+        <% end %>
+    </div>
+
     <div class="flex items-center justify-between mb-6">
       <div>
         <h1 class="text-2xl font-semibold text-white">Majetek</h1>
@@ -88,7 +98,7 @@
               </td>
 
               <td class="px-4 py-3 text-right whitespace-nowrap font-medium text-[#a9a4ed]">
-                <%= asset.purchase_price ? "#{number_with_delimiter(asset.purchase_price.to_i, delimiter: ' ')} Kč" : "—" %>
+                <%= asset.purchase_price ? number_to_currency(asset.purchase_price, strip_insignificant_zeros: true) : "—" %>
               </td>
 
               <td class="px-4 py-3 text-white/70 whitespace-nowrap hidden sm:table-cell">
@@ -119,6 +129,7 @@
         </tbody>
       </table>
     </div>
+    <div><%== @pagy.series_nav %></div>
 
   </div>
 </div>

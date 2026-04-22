@@ -2,6 +2,7 @@ class Attachment < ApplicationRecord
   include DateValidator
 
   belongs_to :asset
+  has_one_attached :file
 
 
   validates :added_date, :asset_id, presence: true

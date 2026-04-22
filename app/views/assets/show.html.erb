@@ -21,6 +21,25 @@
         </div>
         <p class="text-sm text-white/50">Detail majetku</p>
       </div>
+      <div class="flex flex-col items-center gap-4 p-4 bg-white/5 border border-white/10 rounded-2xl w-fit">
+        <% cache @asset do %>
+        <div class="p-2 bg-white rounded-lg shadow-inner">
+          <%= image_tag qr_code_asset_path(@asset), class: "w-32 h-32 block", alt: "QR kód" %>
+        </div>
+          <% end %>
+
+        <%= link_to qr_code_asset_path(@asset, format: :svg),
+                    download: "QR_asset_#{@asset.id}.svg",
+                    class: "inline-flex items-center gap-2 px-4 py-2 bg-[#7F77DD] hover:bg-[#6c64c8] text-white text-sm font-medium rounded-xl transition-all shadow-lg shadow-[#7F77DD]/20 group" do %>
+
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white/80 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+
+          <span>Stáhnout QR štítek</span>
+        <% end %>
+      </div>
+
 
       <div class="flex items-center gap-2">
         <% if can? :update, @asset %>
@@ -69,7 +88,7 @@
             <div class="px-5 py-4">
               <p class="text-xs text-white/40 mb-1">Pořizovací cena</p>
               <p class="text-sm font-medium text-[#a9a4ed]">
-                <%= @asset.purchase_price ? @asset.purchase_price.to_s + " KČ" : "—" %>
+                <%= @asset.purchase_price ? number_to_currency(@asset.purchase_price, strip_insignificant_zeros: true) : "—" %>
               </p>
             </div>
             <div class="px-5 py-4">
@@ -108,5 +127,22 @@
       </div>
 
     </div>
+
+    <div class="mt-12 mb-6">
+      <h2 class="text-lg font-semibold text-white">Přílohy a dokumenty</h2>
+      <p class="text-sm text-white/50 mt-1">Faktury, návody nebo fotky vázané k tomuto majetku</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+      <div class="flex flex-col">
+        <%= render "attachments/list", asset: @asset %>
+      </div>
+      <% if can? :manage, @asset %>
+        <div class="flex flex-col">
+          <%= render "attachments/form", asset: @asset %>
+        </div>
+      <% end %>
+    </div>
+
   </div>
 </div>

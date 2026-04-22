@@ -1,0 +1,160 @@
+<div class="min-h-screen" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <div class="flex items-center gap-2 mb-6 text-sm text-white/40">
+      <%= link_to "Uživatelé", users_path, class: "hover:text-white transition-colors" %>
+      <span>/</span>
+      <span class="text-white/70"><%@user.to_s %></span>
+    </div>
+
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+      <div>
+        <div class="flex items-center gap-3 mb-1">
+          <h1 class="text-2xl font-semibold text-white"><%= @user.to_s %></h1>
+          <span class="inline-block px-2 py-0.5 rounded-md bg-[#7F77DD]/20 text-[#a9a4ed] font-mono text-xs tracking-wide">
+            <%= @user.code %>
+          </span>
+               <span class="inline-block px-2 py-0.5 rounded-md text-xs font-medium bg-purple-500/20 text-purple-300">
+            <%= @user.role %>
+          </span>
+        </div>
+        <p class="text-sm text-white/50">Profil uživatele</p>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <% if can? :update, @user %>
+          <%= link_to "Upravit", edit_user_path(@user),
+                      class: "px-4 py-2 rounded-lg bg-[#7F77DD] hover:bg-[#6c64c8] text-white text-sm font-medium transition-colors shadow-[0_0_15px_rgba(127,119,221,0.2)]" %>
+        <% end %>
+        <% if can? :destroy, @user %>
+          <%= button_to "Smazat", user_path(@user), method: :delete,
+                        data: { confirm: "Opravdu chcete smazat tohoto uživatele?" },
+                        class: "px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-400 text-sm font-medium transition-colors cursor-pointer" %>
+        <% end %>
+      </div>
+    </div>
+
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+
+      <div class="lg:col-span-2 rounded-xl border border-white/10 overflow-hidden h-fit shadow-lg">
+        <div style="background: rgba(255,255,255,0.07);" class="px-5 py-3 border-b border-white/10">
+          <h2 class="text-sm font-semibold text-white/70 uppercase tracking-wider">Osobní a kontaktní údaje</h2>
+        </div>
+        <div class="divide-y divide-white/5">
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-white/5">
+            <div class="px-5 py-4">
+              <p class="text-xs text-white/40 mb-1">Jméno a příjmení</p>
+              <p class="text-sm text-white font-medium"><%= @user.to_s %></p>
+            </div>
+            <div class="px-5 py-4">
+              <p class="text-xs text-white/40 mb-1">Osobní kód</p>
+              <p class="text-sm font-mono text-[#a9a4ed]"><%= @user.code %></p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-white/5">
+            <div class="px-5 py-4">
+              <p class="text-xs text-white/40 mb-1">E-mailová adresa</p>
+              <p class="text-sm text-white"><%= @user.email %></p>
+            </div>
+            <div class="px-5 py-4">
+              <p class="text-xs text-white/40 mb-1">Telefonní číslo</p>
+              <p class="text-sm text-white"><%= @user.phone.presence || "—" %></p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="rounded-xl border border-white/10 overflow-hidden h-fit shadow-lg">
+        <div style="background: rgba(255,255,255,0.07);" class="px-5 py-3 border-b border-white/10">
+          <h2 class="text-sm font-semibold text-white/70 uppercase tracking-wider">Přehled agendy</h2>
+        </div>
+        <div class="divide-y divide-white/5">
+          <div class="px-5 py-4">
+            <p class="text-xs text-white/40 mb-1">Spravované budovy</p>
+            <p class="text-lg text-white font-medium">
+              <% if @user.super_admin? %>
+                <span class="text-sm text-white/50 italic">Má přístup ke všem</span>
+              <% else %>
+                <%= @user.buildings.count %>
+              <% end %>
+            </p>
+          </div>
+          <div class="px-5 py-4">
+            <p class="text-xs text-white/40 mb-1">Hodnota spravovaného majetku</p>
+            <p class="text-lg font-medium text-[#a9a4ed]">
+              <% if @user.super_admin? %>
+                <span class="text-sm text-white/50 italic">—</span>
+              <% else %>
+                <%= @user.assets.any? ? number_to_currency(@user.assets.sum(:purchase_price), strip_unsignificant_zeros: true) : "-" %>
+              <% end %>
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <% unless @user.super_admin? %>
+      <div class="mb-4 mt-12">
+        <h2 class="text-lg font-semibold text-white">Spravované budovy</h2>
+        <p class="text-sm text-white/50 mt-1">Seznam všech budov přiřazených tomuto uživateli</p>
+      </div>
+
+      <div class="overflow-x-auto rounded-xl border border-white/10 shadow-lg">
+        <table class="min-w-full text-sm">
+          <thead>
+          <tr style="background: rgba(255,255,255,0.07);">
+            <th class="px-4 py-3 text-left text-xs font-semibold text-white/50 uppercase tracking-wider whitespace-nowrap">Název budovy</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-white/50 uppercase tracking-wider whitespace-nowrap">Kód</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-white/50 uppercase tracking-wider whitespace-nowrap hidden md:table-cell">Město / Ulice</th>
+            <th class="px-4 py-3 text-center text-xs font-semibold text-white/50 uppercase tracking-wider whitespace-nowrap hidden sm:table-cell">Místnosti</th>
+            <th class="px-4 py-3 text-right text-xs font-semibold text-white/50 uppercase tracking-wider whitespace-nowrap">Hodnota majetku</th>
+          </tr>
+          </thead>
+
+          <tbody class="divide-y divide-white/5">
+          <% if @user.buildings.any? %>
+            <% @user.buildings.each do |building| %>
+              <tr class="hover:bg-white/5 transition-colors group cursor-pointer" onclick="window.location='<%= building_path(building) %>'">
+
+                <td class="px-4 py-3 text-white font-medium whitespace-nowrap">
+                  <%= building.name %>
+                </td>
+
+                <td class="px-4 py-3 whitespace-nowrap">
+                    <span class="inline-block px-2 py-0.5 rounded-md bg-[#7F77DD]/20 text-[#a9a4ed] font-mono text-xs tracking-wide">
+                      <%= building.code %>
+                    </span>
+                </td>
+
+                <td class="px-4 py-3 text-white/70 whitespace-nowrap hidden md:table-cell">
+                  <%= [building.city, building.street].reject(&:blank?).join(", ").presence || "—" %>
+                </td>
+
+                <td class="px-4 py-3 text-white/70 text-center whitespace-nowrap hidden sm:table-cell">
+                  <%= building.rooms.count %>
+                </td>
+
+                <td class="px-4 py-3 text-right whitespace-nowrap font-medium text-[#a9a4ed]">
+                  <%= building.assets.any? ? number_to_currency(building.assets.sum(:purchase_price), strip_insignificant_zeros: true)  : "-" %>
+                </td>
+
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="5" class="px-4 py-12 text-center text-white/40 text-sm">
+                Tento uživatel aktuálně nespravuje žádné budovy.
+              </td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+
+  </div>
+</div>

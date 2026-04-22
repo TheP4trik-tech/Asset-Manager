@@ -77,7 +77,7 @@
             <div class="px-5 py-4">
               <p class="text-xs text-white/40 mb-1">Celková hodnota evidovaného majetku</p>
               <p class="text-sm font-medium text-[#a9a4ed]">
-                <%= @building.assets.any? ?   @building.assets.sum(:purchase_price).to_s + "KČ" : "Bez majetku" %>
+                <%= @building.assets.any? ?  number_to_currency(@building.assets.sum(:purchase_price),  strip_insignificant_zeros: true) : "Bez majetku" %>
               </p>
             </div>
 
@@ -144,7 +144,7 @@
                     <%= room.room_date.strftime("%d. %m. %Y") %>
                   </td>
                   <td class="px-4 py-3 text-white/60 whitespace-nowrap hidden sm:table-cell">
-                    <%=  room.assets.present? ? room.assets.sum(:purchase_price).to_s + "KČ" : "Bez majetku" %>
+                    <%=  room.assets.present? ? number_to_currency(room.assets.sum(:purchase_price), strip_insignificant_zeros: true): "Bez majetku" %>
                   </td>
                   <td class="px-4 py-3 text-right whitespace-nowrap">
                     <%= link_to "Detail →", room_path(room), class: "text-xs text-[#7F77DD] hover:underline" %>

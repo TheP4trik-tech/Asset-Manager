@@ -7,6 +7,8 @@ class User < ApplicationRecord
 
   enum :role, reader: "reader", admin: "admin", super_admin: "super_admin"
   has_many :buildings
+  has_many :rooms, through: :buildings
+  has_many :assets, through: :rooms
   has_many :audit_logs, as: :auditable
 
   validates :email, presence: true, uniqueness: true, format: {with: URI::MailTo::EMAIL_REGEXP}
@@ -27,6 +29,13 @@ class User < ApplicationRecord
   private
   def set_api_key
     self.api_key = SecureRandom.hex(10)
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["first_name", "last_name", "email", "phone", "role", "created_at", "updated_at", "code"]
+  end
+  def self.ransackable_associations(auth_object = nil)
+    ["assets", "buildings", "rooms"]
   end
 
 

@@ -51,7 +51,7 @@
                   <%= room.room_date.strftime("%d. %m. %Y") if room.room_date %>
                 </td>
                 <td class="px-4 py-3 text-white/60 whitespace-nowrap hidden sm:table-cell">
-                  <%= room.assets.any? ? "#{room.assets.sum(:purchase_price)} KČ" : "Bez majetku" %>
+                  <%= room.assets.any? ?  number_to_currency(room.assets.sum(:purchase_price), strip_insignificant_zeros: true): "Bez majetku" %>
                 </td>
                 <td class="px-4 py-3 text-right whitespace-nowrap">
                   <%= link_to "Detail →", room_path(room), class: "text-xs text-[#7F77DD] hover:underline" %>

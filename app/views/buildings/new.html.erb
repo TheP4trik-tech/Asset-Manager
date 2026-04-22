@@ -1,0 +1,123 @@
+<div class="min-h-screen" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <div class="flex items-center gap-2 mb-6 text-sm text-white/40">
+      <%= link_to "Budovy", buildings_path, class: "hover:text-white transition-colors" %>
+      <span>/</span>
+      <span class="text-white/70">Nová budova</span>
+    </div>
+
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+      <div>
+        <h1 class="text-2xl font-semibold text-white">Nová budova</h1>
+        <p class="text-sm text-white/50">Vytvoření nového záznamu</p>
+      </div>
+    </div>
+
+    <%= form_with model: @building do |f| %>
+
+      <% if @building.errors.any? %>
+        <div class="mb-6 px-5 py-4 rounded-xl bg-red-500/10 border border-red-500/20">
+          <% @building.errors.full_messages.each do |msg| %>
+            <p class="text-sm text-red-400"><%= msg %></p>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+
+        <%# Levý panel %>
+        <div class="lg:col-span-2 rounded-xl border border-white/10 overflow-hidden h-fit">
+          <div style="background: rgba(255,255,255,0.07);" class="px-5 py-3 border-b border-white/10">
+            <h2 class="text-sm font-semibold text-white/70 uppercase tracking-wider">Základní informace</h2>
+          </div>
+          <div class="divide-y divide-white/5">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-white/5">
+              <div class="px-5 py-4">
+                <p class="text-xs text-white/40 mb-1">Název budovy <span class="text-red-400">*</span></p>
+                <%= f.text_field :name,
+                                 class: "w-full px-3 py-2 rounded-lg bg-white/10 border border-white/15 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60 focus:border-[#7F77DD] transition-colors",
+                                 placeholder: "Název budovy" %>
+              </div>
+              <div class="px-5 py-4">
+                <p class="text-xs text-white/40 mb-1">Kód</p>
+                <p class="text-sm text-white/30 mt-2 italic">Generuje se automaticky</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-white/5">
+              <div class="px-5 py-4">
+                <p class="text-xs text-white/40 mb-1">Kontaktní e-mail <span class="text-red-400">*</span></p>
+                <%= f.email_field :contact_email,
+                                  class: "w-full px-3 py-2 rounded-lg bg-white/10 border border-white/15 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60 focus:border-[#7F77DD] transition-colors",
+                                  placeholder: "email@example.com" %>
+              </div>
+              <div class="px-5 py-4">
+                <p class="text-xs text-white/40 mb-1">Kontaktní telefon <span class="text-red-400">*</span></p>
+                <%= f.telephone_field :contact_phone,
+                                      class: "w-full px-3 py-2 rounded-lg bg-white/10 border border-white/15 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60 focus:border-[#7F77DD] transition-colors",
+                                      placeholder: "+420 000 000 000" %>
+              </div>
+            </div>
+
+            <div class="px-5 py-4">
+              <p class="text-xs text-white/40 mb-1">Datum budovy <span class="text-red-400">*</span></p>
+              <%= f.date_field :building_date,
+                               class: "w-full px-3 py-2 rounded-lg bg-white/10 border border-white/15 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60 focus:border-[#7F77DD] transition-colors [&::-webkit-calendar-picker-indicator]:invert-[0.6]" %>
+            </div>
+
+          </div>
+        </div>
+
+        <%# Pravý panel %>
+        <div class="rounded-xl border border-white/10 overflow-hidden h-fit">
+          <div style="background: rgba(255,255,255,0.07);" class="px-5 py-3 border-b border-white/10">
+            <h2 class="text-sm font-semibold text-white/70 uppercase tracking-wider">Adresa</h2>
+          </div>
+          <div class="divide-y divide-white/5">
+
+            <div class="px-5 py-4">
+              <p class="text-xs text-white/40 mb-1">Ulice <span class="text-red-400">*</span></p>
+              <%= f.text_field :street,
+                               class: "w-full px-3 py-2 rounded-lg bg-white/10 border border-white/15 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60 focus:border-[#7F77DD] transition-colors",
+                               placeholder: "Ulice a číslo popisné" %>
+            </div>
+
+            <div class="px-5 py-4">
+              <p class="text-xs text-white/40 mb-1">Město</p>
+              <%= f.text_field :city,
+                               class: "w-full px-3 py-2 rounded-lg bg-white/10 border border-white/15 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60 focus:border-[#7F77DD] transition-colors",
+                               placeholder: "Město" %>
+            </div>
+
+            <div class="px-5 py-4">
+              <p class="text-xs text-white/40 mb-1">PSČ</p>
+              <%= f.text_field :zip_code,
+                               class: "w-full px-3 py-2 rounded-lg bg-white/10 border border-white/15 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60 focus:border-[#7F77DD] transition-colors",
+                               placeholder: "000 00" %>
+            </div>
+              <div class="px-5 py-4">
+                <p class="text-xs text-white/40 mb-1">Správce <span class="text-red-400">*</span></p>
+                <%= f.select :user_id,
+                             options_from_collection_for_select(@users, :id, :to_s),
+                             { prompt: "Vyberte správce..." },
+                             { class: "w-full px-3 py-2 rounded-lg bg-white/10 border border-white/15 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60 focus:border-[#7F77DD] transition-colors" } %>
+              </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="flex items-center justify-end gap-3">
+        <%= link_to "Zrušit", buildings_path,
+                    class: "px-4 py-2 rounded-lg text-white/50 hover:text-white text-sm transition-colors" %>
+        <%= f.submit "Vytvořit budovu",
+                     class: "px-4 py-2 rounded-lg bg-[#7F77DD] hover:bg-[#6c64c8] text-white text-sm font-medium transition-colors cursor-pointer" %>
+      </div>
+
+    <% end %>
+
+  </div>
+</div>

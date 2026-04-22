@@ -2,9 +2,15 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
 
-    <div class="mb-6">
-      <h1 class="text-2xl font-semibold text-white">Místnosti</h1>
-      <p class="text-sm text-white/50 mt-1">Kompletní přehled všech místností napříč budovami</p>
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h1 class="text-2xl font-semibold text-white">Místnosti</h1>
+        <p class="text-sm text-white/50 mt-1">Kompletní přehled všech místností napříč budovami</p>
+      </div>
+      <% if can? :create, Room %>
+        <%= link_to "+ Přidat místnost", new_room_path,
+                    class: "px-4 py-2 rounded-lg bg-[#7F77DD] hover:bg-[#6c64c8] text-white text-sm font-medium transition-colors" %>
+      <% end %>
     </div>
 
        <%= search_form_for @q, class: "mb-6 flex flex-col sm:flex-row gap-3 items-start sm:items-center" do |f| %>
@@ -55,7 +61,7 @@
               </td>
 
               <td class="px-4 py-3 text-right whitespace-nowrap hidden md:table-cell font-medium text-[#a9a4ed]">
-                <%=  room.assets.present? ? room.assets.sum(:purchase_price).to_s + "KČ" : "Bez majetku" %>
+                <%=  room.assets.present? ? number_to_currency(room.assets.sum(:purchase_price),  strip_insignificant_zeros: true) : "Bez majetku" %>
               </td>
 
             </tr>

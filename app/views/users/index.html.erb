@@ -1,1 +1,111 @@
-# TODO
+<div class="min-h-screen" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h1 class="text-2xl font-semibold text-white">Uživatelé</h1>
+        <p class="text-sm text-white/50 mt-1">Přehled všech uživatelů v systému</p>
+      </div>
+    </div>
+
+    <%= search_form_for @q, url: users_path, method: :get,
+                        html: { class: "mb-6 flex flex-col sm:flex-row gap-3 items-start sm:items-center" } do |f| %>
+
+      <div class="flex-1 w-full sm:max-w-xs">
+        <%= f.label :first_name_or_last_name_cont, "Hledat uživatele", class: "sr-only" %>
+        <%= f.text_field :first_name_or_last_name_cont,
+                         placeholder: "Hledat jméno, kód, e-mail...",
+                         class: "w-full px-4 py-2 rounded-lg bg-white/10 border border-white/15 text-white placeholder-white/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60 focus:border-[#7F77DD] transition-colors" %>
+      </div>
+
+      <div class="w-full sm:w-auto">
+        <%= f.label :role_eq, "Role", class: "sr-only" %>
+        <%= f.select :role_eq,
+                     options_for_select([['Všechny role', ''], ['Super Admin', 'super_admin'], ['Admin', 'admin'], ['Uživatel', 'user']], @q.role_eq),
+                     {},
+                     class: "w-full sm:w-40 px-4 py-2 rounded-lg bg-[#1a1a2e] border border-white/15 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60 focus:border-[#7F77DD] transition-colors cursor-pointer" %>
+      </div>
+
+      <div class="flex items-center gap-2 w-full sm:w-auto">
+        <%= f.submit "Hledat",
+                     class: "px-4 py-2 rounded-lg bg-[#7F77DD] hover:bg-[#6c64c8] text-white text-sm font-medium transition-colors cursor-pointer w-full sm:w-auto text-center" %>
+
+          <%= link_to "Zrušit", users_path,
+                      class: "px-4 py-2 rounded-lg text-white/50 hover:text-white bg-white/5 hover:bg-white/10 text-sm transition-colors text-center w-full sm:w-auto" %>
+      </div>
+    <% end %>
+
+    <div class="overflow-x-auto rounded-xl border border-white/10 shadow-lg">
+      <table class="min-w-full text-sm">
+        <thead>
+        <tr style="background: rgba(255,255,255,0.07);">
+          <th class="px-4 py-3 text-left text-xs font-semibold text-white/50 uppercase tracking-wider whitespace-nowrap"><%= sort_link(@q, :last_name, 'JMÉNO') %></th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-white/50 uppercase tracking-wider whitespace-nowrap"><%= sort_link(@q, :code, 'KÓD') %></th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-white/50 uppercase tracking-wider whitespace-nowrap hidden sm:table-cell"><%= sort_link(@q, :email, 'E-MAIL') %></th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-white/50 uppercase tracking-wider whitespace-nowrap hidden md:table-cell"><%= sort_link(@q, :phone, 'TELEFON') %></th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-white/50 uppercase tracking-wider whitespace-nowrap"><%= sort_link(@q, :role, 'ROLE') %></th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-white/50 uppercase tracking-wider whitespace-nowrap hidden lg:table-cell">BUDOVY</th>
+          <th class="px-4 py-3 text-right text-xs font-semibold text-white/50 uppercase tracking-wider whitespace-nowrap hidden lg:table-cell">HODNOTA MAJETKU</th>
+        </tr>
+        </thead>
+
+        <tbody class="divide-y divide-white/5">
+        <% if @users.any? %>
+          <% @users.each do |user| %>
+            <tr class="hover:bg-white/5 transition-colors group cursor-pointer" onclick="window.location='<%= user_path(user) %>'">
+
+              <td class="px-4 py-3 text-white font-medium whitespace-nowrap">
+                <%= user.to_s %>
+              </td>
+
+              <td class="px-4 py-3 whitespace-nowrap">
+                <span class="inline-block px-2 py-0.5 rounded-md bg-[#7F77DD]/20 text-[#a9a4ed] font-mono text-xs tracking-wide">
+                  <%= user.code %>
+                </span>
+              </td>
+
+              <td class="px-4 py-3 text-white/70 whitespace-nowrap hidden sm:table-cell">
+                <%= user.email %>
+              </td>
+
+              <td class="px-4 py-3 text-white/70 whitespace-nowrap hidden md:table-cell">
+                <%= user.phone.presence || "—" %>
+              </td>
+
+              <td class="px-4 py-3 whitespace-nowrap">
+                <span class="inline-block px-2 py-0.5 rounded-md text-xs font-medium bg-purple-500/20 text-purple-300">
+                  <%= user.role %>
+                </span>
+              </td>
+
+              <td class="px-4 py-3 text-white/70 whitespace-nowrap hidden lg:table-cell">
+                <% if user.super_admin? %>
+                  <span class="text-white/30 italic">—</span>
+                <% else %>
+                  <%= user.buildings.count %>
+                <% end %>
+              </td>
+
+              <td class="px-4 py-3 text-right whitespace-nowrap hidden lg:table-cell font-medium text-[#a9a4ed]">
+                <% if user.super_admin? %>
+                  <span class="text-white/30 italic">—</span>
+                <% else %>
+                  <%= user.assets.present? ? number_to_currency(user.assets.sum(:purchase_price).to_s, strip_insignificant_zeros: true) : "Bez majetku" %>
+                <% end %>
+              </td>
+
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="7" class="px-4 py-12 text-center text-white/40 text-sm">
+              Žádní uživatelé neodpovídají zadaným filtrům.
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

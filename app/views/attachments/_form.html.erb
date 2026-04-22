@@ -1,0 +1,36 @@
+<div class="rounded-xl border border-white/10 overflow-hidden shadow-lg h-fit">
+  <div style="background: rgba(255,255,255,0.07);" class="px-5 py-3 border-b border-white/10">
+    <h2 class="text-sm font-semibold text-white/70 uppercase tracking-wider">Nahrát novou přílohu</h2>
+  </div>
+
+  <div class="p-5">
+    <%= form_with model: [asset, Attachment.new], local: true, class: "space-y-4" do |f| %>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="md:col-span-2">
+          <%= f.label :file, "Soubor", class: "block text-xs text-white/40 mb-1" %>
+          <%= f.file_field :file, required: true,
+                           class: "w-full text-sm text-white/50 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#7F77DD]/20 file:text-[#a9a4ed] hover:file:bg-[#7F77DD]/30 cursor-pointer" %>
+        </div>
+        <div>
+          <%= f.label :attachment_type, "Typ přílohy", class: "block text-xs text-white/40 mb-1" %>
+          <%= f.text_field :attachment_type, required: true, maxlength: 20,
+                           class: "w-full px-4 py-2 rounded-lg bg-white/10 border border-white/15 text-white placeholder-white/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60 transition-colors" %>
+        </div>
+        <div>
+          <%= f.label :added_date, "Datum přidání", class: "block text-xs text-white/40 mb-1" %>
+          <%= f.date_field :added_date, required: true, value: Date.current,
+                           class: "w-full px-4 py-2 rounded-lg bg-[#1a1a2e] border border-white/15 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60 transition-colors cursor-pointer" %>
+        </div>
+        <div class="md:col-span-2">
+          <%= f.label :description, "Popis (volitelné)", class: "block text-xs text-white/40 mb-1" %>
+          <%= f.text_area :description, rows: 2, maxlength: 255,
+                          class: "w-full px-4 py-2 rounded-lg bg-white/10 border border-white/15 text-white placeholder-white/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60 transition-colors" %>
+        </div>
+      </div>
+      <div class="pt-4 flex justify-end border-t border-white/5 mt-4">
+        <%= f.submit "Nahrát a uložit",
+                     class: "px-4 py-2 rounded-lg bg-[#7F77DD] hover:bg-[#6c64c8] text-white text-sm font-medium transition-colors cursor-pointer shadow-[0_0_15px_rgba(127,119,221,0.2)]" %>
+      </div>
+    <% end %>
+  </div>
+</div>

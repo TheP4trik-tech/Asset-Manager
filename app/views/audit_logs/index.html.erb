@@ -1,0 +1,106 @@
+<div class="min-h-screen" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <div class="mb-8">
+      <h1 class="text-2xl font-semibold text-white">Globální Audit Log</h1>
+      <p class="text-sm text-white/50">Historie všech změn v systému</p>
+    </div>
+
+    <div class="mb-6 p-4 rounded-xl border border-white/10 bg-white/5">
+      <%= search_form_for @q, url: audit_logs_path, class: "flex flex-wrap items-end gap-4" do |f| %>
+        <div>
+          <%= f.label :user_email_cont, "Uživatel (email)", class: "block text-xs text-white/40 mb-1" %>
+          <%= f.search_field :user_email_cont, class: "px-3 py-1.5 rounded-lg bg-white/10 border border-white/15 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60" %>
+        </div>
+
+        <div>
+          <%= f.label :action_eq, "Akce", class: "block text-xs text-white/40 mb-1" %>
+          <%= f.select :action_eq, ["Vytvoření", "Úprava", "Smazání"], { include_blank: "Vše" }, class: "px-3 py-1.5 rounded-lg bg-[#1a1a2e] border border-white/15 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60" %>
+        </div>
+
+        <div>
+          <%= f.label :auditable_type_eq, "Typ entity", class: "block text-xs text-white/40 mb-1" %>
+          <%= f.select :auditable_type_eq, ["Asset", "Room", "Building"], { include_blank: "Vše" }, class: "px-3 py-1.5 rounded-lg bg-[#1a1a2e] border border-white/15 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#7F77DD]/60" %>
+        </div>
+
+        <div class="flex gap-2">
+          <%= f.submit "Filtrovat", class: "px-4 py-1.5 rounded-lg bg-[#7F77DD] hover:bg-[#6c64c8] text-white text-sm font-medium transition-colors cursor-pointer" %>
+          <%= link_to "Zrušit", audit_logs_path, class: "px-4 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-white/70 text-sm transition-colors" %>
+        </div>
+      <% end %>
+    </div>
+
+    <%# Tabulka %>
+    <div class="rounded-xl border border-white/10 overflow-hidden bg-white/5 shadow-xl">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+          <tr class="border-b border-white/10 bg-white/5 text-xs uppercase tracking-wider text-white/40">
+            <th class="px-6 py-4 font-semibold text-center">Čas</th>
+            <th class="px-6 py-4 font-semibold">Uživatel</th>
+            <th class="px-6 py-4 font-semibold">Akce</th>
+            <th class="px-6 py-4 font-semibold">Předmět</th>
+            <th class="px-6 py-4 font-semibold">Změny</th>
+          </tr>
+          </thead>
+          <tbody class="divide-y divide-white/5 text-sm text-white/70">
+          <% @audit_logs.each do |log| %>
+            <tr class="hover:bg-white/5 transition-colors">
+              <td class="px-6 py-4 whitespace-nowrap font-mono text-[11px] text-white/40 text-center">
+                <%= log.created_at.strftime("%d.%m.%y %H:%M") %>
+              </td>
+              <td class="px-6 py-4 text-white/90">
+                <%= log.user&.email || "Systém" %>
+              </td>
+              <td class="px-6 py-4">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase
+                    <%= case log.action
+                        when 'Vytvoření' then 'bg-green-500/20 text-green-400'
+                        when 'Úprava' then 'bg-blue-500/20 text-blue-400'
+                        when 'Smazání' then 'bg-red-500/20 text-red-400'
+                        else 'bg-white/10 text-white/60'
+                        end %>">
+                    <%= log.action %>
+                  </span>
+              </td>
+              <td class="px-6 py-4">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-[#a9a4ed] uppercase font-bold"><%= log.auditable_type %></span>
+                  <span class="text-white/80">
+                    <% if log.auditable %>
+                      <%= link_to log.auditable.try(:name) || "ID: #{log.auditable_id}", log.auditable, class: "hover:underline" %>
+                    <% else %>
+                      <span class="italic text-white/30">Již smazáno</span>
+                    <% end %>
+                  </span>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <% if log.changed_field.present? %>
+                  <div class="flex flex-col gap-1">
+                    <% log.changed_field.each do |field, values| %>
+                      <div class="text-xs">
+                        <span class="text-white/40"><%= field %>:</span>
+                        <span class="text-red-400 line-through"><%= values[0].presence || "—" %></span>
+                        <span class="text-white/30">→</span>
+                        <span class="text-green-400"><%= values[1].presence || "—" %></span>
+                      </div>
+                    <% end %>
+                  </div>
+                <% else %>
+                  <span class="text-white/20 italic text-xs">—</span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="mt-8 flex justify-center">
+      <%== @pagy.series_nav %>
+    </div>
+
+  </div>
+</div>

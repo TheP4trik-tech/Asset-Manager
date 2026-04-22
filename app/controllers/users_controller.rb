@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
   load_resource
   def index
-    @users = User.all
+    @q = User.ransack(params[:q])
+    @users = @q.result(distinct: true)
   end
   def show
     @user = User.find(params[:id])
@@ -19,7 +20,7 @@ class UsersController < ApplicationController
   end
   private
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    params.require(:user).permit(:name, :email, :password, :phone, :password_confirmation)
   end
 
 end

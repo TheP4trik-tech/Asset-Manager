@@ -6,7 +6,6 @@ class Building < ApplicationRecord
   belongs_to :user
   has_many :rooms, dependent: :destroy
   has_many :assets, through: :rooms
-  has_many :audit_logs, as: :auditable
 
   validates :code, uniqueness: true, presence: true, length: {is: 10}
   validates :name, presence: true, length: 3..20
@@ -21,7 +20,7 @@ class Building < ApplicationRecord
 
 
   def self.ransackable_attributes(auth_object = nil)
-    ["building_date", "city", "code", "contact_email", "contact_phone", "created_at", "name", "street", "updated_at",  "zip_code"]
+    ["building_date", "city", "code", "contact_email", "contact_phone", "created_at", "name", "street", "updated_at",  "zip_code", "user_id"]
   end
 
 end

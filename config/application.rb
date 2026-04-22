@@ -1,4 +1,4 @@
-require_relative "boot"
+  require_relative "boot"
 
 require "rails/all"
 
@@ -12,7 +12,7 @@ module Prr2ApiProject
     # Posted by Aboozar Rajabi
     # Retrieved 2026-04-11, License - CC BY-SA 4.0
 
-
+    config.active_job.queue_adapter = :delayed_job
     I18n.load_path += Dir[File.expand_path("config/locales") + "/*.yml"]
     I18n.default_locale = :cs # (note that `en` is already the default!)
 

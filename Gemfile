@@ -41,6 +41,9 @@ gem 'devise-i18n'
 gem 'cancancan', '~> 3.5'
 gem 'ransack'
 gem 'stimulus-rails', '~> 1.2', '>= 1.2.1'
+gem "activestorage"
+gem 'pagy', '~> 43'
+gem "rqrcode", "~> 3.0"
 
 
 group :development, :test do

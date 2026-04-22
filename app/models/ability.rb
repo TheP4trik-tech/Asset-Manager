@@ -10,12 +10,15 @@ class Ability
 
     if user.reader?
     can :read, :all
+    can :edit, User, id: user.id
     end
 
     if user.admin?
     can [:read, :update], Building, user_id: user.id
     can :manage, Room, building: {user_id: user.id}
     can :create, Asset
+    can :create , Room
+    can :edit, User, id: user.id
     can :manage, Asset,room: {building: {user_id: user.id }}
 
     end

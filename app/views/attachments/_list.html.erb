@@ -1,0 +1,42 @@
+<div class="rounded-xl border border-white/10 overflow-hidden shadow-lg h-fit">
+  <div style="background: rgba(255,255,255,0.07);" class="px-5 py-3 border-b border-white/10">
+    <h3 class="text-sm font-semibold text-white/70 uppercase tracking-wider">Nahrané soubory</h3>
+  </div>
+
+  <div class="divide-y divide-white/5">
+    <% if asset.attachments.any? %>
+      <% asset.attachments.each do |attachment| %>
+        <div class="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-white/5 transition-colors">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-white/10 text-white/70">
+                <%= attachment.attachment_type %>
+              </span>
+              <span class="text-xs text-white/40">
+                <%= attachment.added_date.strftime("%d. %m. %Y") if attachment.added_date %>
+              </span>
+            </div>
+            <% if attachment.file.attached? %>
+              <%= link_to attachment.file.filename.to_s, rails_blob_path(attachment.file, disposition: "attachment"), class: "text-sm font-medium text-[#a9a4ed] hover:text-white transition-colors block mb-1 truncate" %>
+            <% else %>
+              <span class="text-sm font-medium text-red-400 block mb-1">Soubor chybí</span>
+            <% end %>
+            <% if attachment.description.present? %>
+              <p class="text-xs text-white/50"><%= attachment.description %></p>
+            <% end %>
+          </div>
+          <div class="flex items-center gap-3">
+            <% if attachment.file.attached? %>
+              <%= link_to "Stáhnout", rails_blob_path(attachment.file, disposition: "attachment"), class: "text-xs text-white/70 hover:text-white transition-colors" %>
+            <% end %>
+            <%= button_to "Smazat", asset_attachment_path(asset, attachment), method: :delete, form: { class: "inline" }, data: { confirm: "Opravdu smazat tuto přílohu?" }, class: "text-xs text-red-400 hover:text-red-300 transition-colors" %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="p-8 text-center text-sm text-white/40">
+        Zatím nebyly nahrány žádné přílohy.
+      </div>
+    <% end %>
+  </div>
+</div>

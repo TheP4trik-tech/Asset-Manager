@@ -4,7 +4,7 @@ class BuildingsController < ApplicationController
 
   def index
     @q = Building.ransack(params[:q])
-    @buildings = @q.result(distinct: true)
+    @buildings = @q.result(distinct: true).includes(:rooms, :assets)
   end
 
 
@@ -19,6 +19,7 @@ class BuildingsController < ApplicationController
 
   def new
     @building = Building.new
+    @users = User.all
   end
 
   def destroy
@@ -49,6 +50,7 @@ class BuildingsController < ApplicationController
   def building_params
     params.require(:building).permit(:name, :contact_email, :contact_phone, :street, :city, :zip_code, :building_date, :user_id)
   end
+
 
 
 end
