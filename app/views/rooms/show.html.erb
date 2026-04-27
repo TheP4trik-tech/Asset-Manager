@@ -27,7 +27,7 @@
         <% end %>
         <% if can? :destroy, @room %>
           <%= button_to "Smazat", room_path(@room), method: :delete,
-                        data: { confirm: "Opravdu chcete smazat tuto místnost?" },
+                        data: { turbo_confirm: "Opravdu chcete smazat tuto místnost? Tato akce smaže veškerý majetek" },
                         class: "px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-400 text-sm font-medium transition-colors cursor-pointer" %>
         <% end %>
       </div>
@@ -60,7 +60,8 @@
             <div class="px-5 py-4">
               <p class="text-xs text-white/40 mb-1">Celková hodnota majetku</p>
               <p class="text-sm font-medium text-[#a9a4ed]">
-                <%= @room.assets.any? ?  @room.assets.sum(:purchase_price).to_s + "KČ" : "Bez majetku" %>
+                <% room_assets_sum = @room.assets.sum(&:purchase_price) %>
+                <%= room_assets_sum > 0 ?  number_to_currency(room_assets_sum, strip_insignificant_zeros: true)  : "Bez majetku" %>
 
               </p>
             </div>
@@ -96,10 +97,10 @@
     <div class="rounded-xl border border-white/10 overflow-hidden">
       <div style="background: rgba(255,255,255,0.07);" class="px-5 py-3 border-b border-white/10 flex items-center justify-between">
         <h2 class="text-sm font-semibold text-white/70 uppercase tracking-wider">Evidovaný majetek</h2>
-        <span class="text-xs text-white/40"><%= @room.assets.count %> položek</span>
+        <span class="text-xs text-white/40"><%= @room.assets.size %> položek</span>
       </div>
 
-      <% if @room.assets.any? %>
+      <% if @room.assets.present? %>
         <div class="overflow-x-auto">
           <table class="min-w-full text-sm">
             <thead>

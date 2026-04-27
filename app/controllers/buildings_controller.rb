@@ -4,7 +4,8 @@ class BuildingsController < ApplicationController
 
   def index
     @q = Building.ransack(params[:q])
-    @buildings = @q.result(distinct: true).includes(:rooms, :assets)
+    @buildings = @q.result(distinct: true)
+    @pagy, @buildings = pagy(@buildings, limit: 7)
   end
 
 
@@ -15,35 +16,47 @@ class BuildingsController < ApplicationController
 
   def edit
     @building = Building.find(params[:id])
+    @users = User.all if current_user.super_admin?
   end
 
   def new
     @building = Building.new
-    @users = User.all
+    @users = User.all if current_user.super_admin?
   end
 
   def destroy
     @building = Building.find(params[:id])
     @building.destroy
-    redirect_to buildings_path
+    redirect_to buildings_path, notice: "Building deleted successfully"
   end
 
   def create
     @building = Building.new(building_params)
+    @users = User.all
+
     if @building.save
-      redirect_to @building
+      respond_to do |format|
+        format.turbo_stream { redirect_to @building, notice: "Building created successfully" }
+        format.html { redirect_to @building, notice: "Building created successfully" }
+      end
     else
-      render :new
+      @users = User.all
+      render :new, status: :unprocessable_entity
     end
   end
 
   def update
-    @building = Building.find(params[:id])
+  @building = Building.find(params[:id])
+
+  respond_to do |format|
     if @building.update(building_params)
-      redirect_to @building
+      format.turbo_stream
+      format.html { redirect_to @building, notice: "Building updated successfully" }
     else
-      render :edit, notice: "Please fill out all fields",status: :unprocessable_entity
-    end
+      format.turbo_stream { render :edit, status: :unprocessable_entity }
+      format.html { render :edit, status: :unprocessable_entity }
+      end
+  end
   end
 
   private

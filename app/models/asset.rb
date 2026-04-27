@@ -5,9 +5,10 @@
 
     belongs_to :room
     has_many :attachments, dependent: :destroy
-    has_many :audit_logs, as: :auditable
+    has_many :audit_logs, as: :auditable, dependent: :destroy
 
-    validates :code, uniqueness: true, presence: true, length: {is: 10 }
+
+    validates :code, uniqueness: true, presence: true
     validates :name, presence: true, length: {minimum: 3, maximum: 20}
     validates :room_id, :last_check_date, :purchase_date, presence: true
 

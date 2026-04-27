@@ -1,6 +1,6 @@
 require 'csv'
 class CsvExportJob < ApplicationJob
-  queue_as :default
+  queue_as :delayed
 
   def perform(q_params)
 
@@ -8,9 +8,12 @@ class CsvExportJob < ApplicationJob
     @assets = @q.result(distinct: true)
 
     csv_string = CSV.generate do |csv|
-      csv << ["ID","Název", "Kód", "Místo", "Cena", "Datum nákupu", "Datum poslední kontroly", "Popis", "Místnost", "Budova"]
+      csv << ["ID","Název", "Kód", "Místo", "Cena", "Datum nákupu", "Datum poslední kontroly",
+              "Popis", "Místnost", "Budova"]
       @assets.each do |asset|
-        csv << [asset.id, asset.name, asset.code, asset.room.building.city, asset.purchase_price, asset.purchase_date, asset.last_check_date, asset.note, asset.room.name, asset.room.building.name]
+        csv << [asset.id, asset.name, asset.code, asset.room.building.city,
+                asset.purchase_price, asset.purchase_date, asset.last_check_date,
+                asset.note, asset.room.name, asset.room.building.name]
       end
     end
     export_path = Rails.root.join('public', 'exports', 'majetek.csv')

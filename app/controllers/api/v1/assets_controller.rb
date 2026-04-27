@@ -1,8 +1,6 @@
 module Api
   module V1
     class AssetsController < ApiController
-      include ActionController::HttpAuthentication::Token::ControllerMethods
-      before_action :authenticate
 
 
 
@@ -21,25 +19,26 @@ module Api
         @asset = Asset.find(params[:id])
         if @asset.update(asset_params)
           render json: @asset
+        else
+          render json: @asset.errors, status: :unprocessable_entity
         end
       end
 
       def destroy
         @asset = Asset.find(params[:id])
-        @asset.destroy
+        if @asset.destroy
+          head :no_content
+        else
+          render json: { errors: @asset.errors.full_messages }, status: :unprocessable_entity
+        end
       end
 
       def asset_params
-        params.require(:asset).permit(:name, :description, :image, :building_id)
+        params.require(:asset).permit(:name, :room_id, :purchase_date, :last_check_date, :purchase_price, :note)
       end
 
-      private
-      def authenticate
-        authenticate_or_request_with_http_token do |token, options|
-          User.find_by(api_key: token)
 
-        end
-      end
+
 
 
     end

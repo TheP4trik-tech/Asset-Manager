@@ -1,14 +1,15 @@
-module CodeGenerator
-  extend ActiveSupport::Concern
+ module CodeGenerator
+    extend ActiveSupport::Concern
 
-  private
-
-  ## NOT OPTIMAL, YET FUNCTIONING FOR FEW MODELS AND INSTANCES
-  def generate_code
-    loop do
-    self.code = SecureRandom.hex(5)
-    break unless [Building, Room, Asset, User].any? { |model| model.exists?(code: code) }
+    included do
+      before_validation :generate_code, on: :create
     end
-  end
 
-end
+    private
+    def generate_code
+      loop do
+        self.code = SecureRandom.uuid
+        break unless self.class.exists?(code: code)
+      end
+    end
+ end

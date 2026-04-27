@@ -1,17 +1,16 @@
 class AssetsController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource except: [:qr_code]
   before_action :set_user
 
 
   def show
-    @asset = Asset.find(params[:id])
+    @asset = Asset.includes(:room, attachments: :file_attachment).find(params[:id])
     @qr_svg = Qr.call(@asset)
 
   end
   def index
     @q = Asset.ransack(params[:q])
     @assets = @q.result(distinct: true).includes(room: :building)
-
     @pagy, @assets = pagy(@assets, limit: 7)
 
     @search_params = params[:q]&.permit!
@@ -28,7 +27,7 @@ class AssetsController < ApplicationController
     if @asset.save
       redirect_to @asset
     else
-      render :new
+      render new_asset_path, notice: "Please fill out all fields",status: :unprocessable_entity
     end
   end
   def edit
@@ -37,11 +36,13 @@ class AssetsController < ApplicationController
 
   end
   def update
-    @asset = Asset.find(params[:id])
     if @asset.update(asset_params)
-      redirect_to @asset
+      respond_to do |format|
+        format.turbo_stream { redirect_to @asset, notice: "Změna byla provedena." }
+        format.html { redirect_to @asset, notice: "Změna byla provedena." }
+      end
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
   def destroy

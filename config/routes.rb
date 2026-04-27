@@ -7,8 +7,12 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
   namespace :api do
     namespace :v1 do
-      resources :assets, controller: "assets"
+      resources :assets, controller: "assets", only: :index do
+        resources :audit_logs, controller: "audit_logs", only: :index
       end
+      resources :buildings, controller: "buildings", only: :index
+      resources :rooms, controller: "rooms", only: :index
+  end
   end
 
   resources :users, :buildings, :rooms

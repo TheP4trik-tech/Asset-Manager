@@ -82,7 +82,7 @@
                 <% if user.super_admin? %>
                   <span class="text-white/30 italic">—</span>
                 <% else %>
-                  <%= user.buildings.count %>
+                  <%= user.buildings_count%>
                 <% end %>
               </td>
 
@@ -90,7 +90,8 @@
                 <% if user.super_admin? %>
                   <span class="text-white/30 italic">—</span>
                 <% else %>
-                  <%= user.assets.present? ? number_to_currency(user.assets.sum(:purchase_price).to_s, strip_insignificant_zeros: true) : "Bez majetku" %>
+                  <% user_asset_sum = user.assets.sum(&:purchase_price) %>
+                  <%= user_asset_sum > 0 ? number_to_currency(user_asset_sum, strip_insignificant_zeros: true) : "Bez majetku" %>
                 <% end %>
               </td>
 
@@ -106,6 +107,6 @@
         </tbody>
       </table>
     </div>
-
+   <%== @pagy.series_nav %>
   </div>
 </div>

@@ -1,13 +1,13 @@
 class Room < ApplicationRecord
   include DateValidator, CodeGenerator
 
-  belongs_to :building
+  belongs_to :building, counter_cache: true
   has_many :assets, dependent: :destroy
 
 
 
-  validates :code, uniqueness: true, presence: true, length: {is: 10}
-  validates :name, presence: true, length: 3..20
+  validates :code, uniqueness: true, presence: true
+  validates :name, presence: true, length: 2..20
   validates :room_date, :building_id, presence: true
 
   validate {date_not_in_future?(:room_date)}

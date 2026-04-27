@@ -1,13 +1,10 @@
 <%= form_with(model: @building, class: "flex flex-col", data: { turbo: false }) do |f| %>
 
   <% if @building.errors.any? %>
-    <div class="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20">
-      <h3 class="text-sm font-medium text-red-400 mb-2"><%= @building.errors.count %> chyb zabránilo uložení:</h3>
-      <ul class="text-sm text-red-400/80 list-disc list-inside">
-        <% @building.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-      </ul>
+    <div class="mb-6 px-5 py-4 rounded-xl bg-red-500/10 border border-red-500/20">
+      <% @building.errors.full_messages.each do |msg| %>
+        <p class="text-sm text-red-400"><%= msg %></p>
+      <% end %>
     </div>
   <% end %>
 
@@ -37,7 +34,7 @@
           </div>
           <div class="px-5 py-4">
             <%= f.label :contact_phone, "Kontaktní telefon", class: "block text-xs text-white/40 mb-2" %>
-            <%= f.telephone_field :contact_phone, class: "w-full px-3 py-2 rounded-md bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-[#7F77DD] focus:ring-1 focus:ring-[#7F77DD] transition-colors" %>
+            <%= f.telephone_field :contact_phone, required: true, minlength:  6, class: "w-full px-3 py-2 rounded-md bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-[#7F77DD] focus:ring-1 focus:ring-[#7F77DD] transition-colors" %>
           </div>
         </div>
 
@@ -52,7 +49,7 @@
         <div class="divide-y divide-white/5">
           <div class="px-5 py-4">
             <%= f.label :street, "Ulice", class: "block text-xs text-white/40 mb-2" %>
-            <%= f.text_field :street, class: "w-full px-3 py-2 rounded-md bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-[#7F77DD] focus:ring-1 focus:ring-[#7F77DD] transition-colors" %>
+            <%= f.text_field :street, required: true, mininal: 3, class: "w-full px-3 py-2 rounded-md bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-[#7F77DD] focus:ring-1 focus:ring-[#7F77DD] transition-colors" %>
           </div>
           <div class="px-5 py-4">
             <%= f.label :city, "Město", class: "block text-xs text-white/40 mb-2" %>

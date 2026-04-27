@@ -1,0 +1,26 @@
+<tr id="<%= dom_id(building) %>" class="hover:bg-white/5 transition-colors group cursor-pointer"
+    onclick="window.location='<%= building_path(building) %>'">
+  <td class="px-4 py-3 text-white font-medium whitespace-nowrap">
+    <%= building.name %>
+  </td>
+  <td class="px-4 py-3 whitespace-nowrap">
+                  <span class="inline-block px-2 py-0.5 rounded-md bg-[#7F77DD]/20 text-[#a9a4ed] font-mono text-xs tracking-wide">
+                    <%= building.code %>
+                  </span>
+  </td>
+  <td class="px-4 py-3 text-white/70 whitespace-nowrap">
+    <%= building.contact_email %>
+  </td>
+  <td class="px-4 py-3 text-white/70 whitespace-nowrap">
+    <%= building.contact_phone %>
+  </td>
+  <td class="px-4 py-3 text-white/70 whitespace-nowrap">
+    <%= building.city.presence || "—" %>
+  </td>
+  <td class="px-4 py-3 text-white/70 whitespace-nowrap">
+    <%= building.street.presence || "—" %>
+  </td>
+  <td class="px-4 py-3 text-white/70 whitespace-nowrap">
+    <%= building.building_date.strftime("%d. %m. %Y")%>
+  </td>
+</tr>

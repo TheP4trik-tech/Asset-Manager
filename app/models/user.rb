@@ -6,29 +6,32 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   enum :role, reader: "reader", admin: "admin", super_admin: "super_admin"
-  has_many :buildings
+  has_many :buildings, dependent: :destroy
   has_many :rooms, through: :buildings
   has_many :assets, through: :rooms
-  has_many :audit_logs, as: :auditable
+  has_many :audit_logs, as: :auditable, dependent: :destroy
 
-  validates :email, presence: true, uniqueness: true, format: {with: URI::MailTo::EMAIL_REGEXP}
-  validates :first_name, :last_name, presence: true, length: 3..20,allow_blank: true
+  has_many :created_audit_logs, class_name: "AuditLog", foreign_key: "user_id", dependent: :destroy
+
+  validates :email, presence: true, uniqueness: true, format: {with: Devise.email_regexp}
+  validates :first_name, :last_name, presence: true, length: 2..20
   validates :phone, length: 3..15, allow_blank: true
-  validates :code, uniqueness: true, presence: true, length: {is:10}
-  validates  :role, presence: true
+  validates :code, uniqueness: true, presence: true
+  validates  :role, :api_key, presence: true
 
   before_validation :set_api_key, on: :create
-  before_validation :generate_code, on: :create
 
-
-
+  scope :ordered, -> { order(last_name: :asc) }
   def to_s
     "#{first_name} #{last_name}"
   end
 
   private
   def set_api_key
-    self.api_key = SecureRandom.hex(10)
+    loop do
+      self.api_key = SecureRandom.uuid
+      break unless self.class.exists?(api_key: api_key)
+    end
   end
 
   def self.ransackable_attributes(auth_object = nil)

@@ -79,7 +79,7 @@
               <% if @user.super_admin? %>
                 <span class="text-sm text-white/50 italic">Má přístup ke všem</span>
               <% else %>
-                <%= @user.buildings.count %>
+                <%= @user.buildings_count %>
               <% end %>
             </p>
           </div>
@@ -89,7 +89,8 @@
               <% if @user.super_admin? %>
                 <span class="text-sm text-white/50 italic">—</span>
               <% else %>
-                <%= @user.assets.any? ? number_to_currency(@user.assets.sum(:purchase_price), strip_unsignificant_zeros: true) : "-" %>
+                <% asset_sum = @user.assets.sum(&:purchase_price) %>
+                <%= asset_sum > 0 ? number_to_currency(asset_sum, strip_unsignificant_zeros: true) : "-" %>
               <% end %>
             </p>
           </div>
@@ -116,8 +117,8 @@
           </thead>
 
           <tbody class="divide-y divide-white/5">
-          <% if @user.buildings.any? %>
-            <% @user.buildings.each do |building| %>
+          <% if @buildings.present? %>
+            <% @buildings.each do |building| %>
               <tr class="hover:bg-white/5 transition-colors group cursor-pointer" onclick="window.location='<%= building_path(building) %>'">
 
                 <td class="px-4 py-3 text-white font-medium whitespace-nowrap">
@@ -135,11 +136,12 @@
                 </td>
 
                 <td class="px-4 py-3 text-white/70 text-center whitespace-nowrap hidden sm:table-cell">
-                  <%= building.rooms.count %>
+                  <%= building.rooms_count %>
                 </td>
 
                 <td class="px-4 py-3 text-right whitespace-nowrap font-medium text-[#a9a4ed]">
-                  <%= building.assets.any? ? number_to_currency(building.assets.sum(:purchase_price), strip_insignificant_zeros: true)  : "-" %>
+                    <% building_sum = building.assets.sum(&:purchase_price) %>
+                  <%= building_sum > 0 ? number_to_currency(building_sum, strip_insignificant_zeros: true)  : "-" %>
                 </td>
 
               </tr>

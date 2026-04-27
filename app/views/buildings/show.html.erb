@@ -25,7 +25,7 @@
             <% end %>
           <% if can? :destroy, @building %>
           <%= button_to "Smazat", building_path(@building), method: :delete,
-                        data: { confirm: "Opravdu chcete smazat tuto budovu?" },
+                        data: { turbo_confirm: "Opravdu chcete smazat tuto budovu? Tato akce smaže veškerý majetek i místnosti" },
                         class: "px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-400 text-sm font-medium transition-colors cursor-pointer" %>
             <% end %>
         </div>
@@ -70,7 +70,7 @@
               </div>
               <div class="px-5 py-4">
                 <p class="text-xs text-white/40 mb-1">Celkové množství místností</p>
-                <p class="text-sm text-white"><%= @building.rooms.count %></p>
+                <p class="text-sm text-white"><%= @building.rooms_count %></p>
               </div>
             </div>
 
@@ -115,10 +115,10 @@
       <div class="rounded-xl border border-white/10 overflow-hidden">
         <div style="background: rgba(255,255,255,0.07);" class="px-5 py-3 border-b border-white/10 flex items-center justify-between">
           <h2 class="text-sm font-semibold text-white/70 uppercase tracking-wider">Místnosti</h2>
-          <span class="text-xs text-white/40"><%= @building.rooms.count %> místností</span>
+          <span class="text-xs text-white/40"><%= @building.rooms_count %> místností</span>
         </div>
 
-        <% if @building.rooms.any? %>
+        <% if @rooms.present? %>
           <div class="overflow-x-auto">
             <table class="min-w-full text-sm">
               <thead>
@@ -131,7 +131,7 @@
               </tr>
               </thead>
               <tbody class="divide-y divide-white/5">
-              <% @building.rooms.each do |room| %>
+              <% @rooms.each do |room| %>
                 <tr class="hover:bg-white/5 transition-colors group cursor-pointer"
                     onclick="window.location='<%= room_path(room) %>'">
                   <td class="px-4 py-3 text-white font-medium whitespace-nowrap"><%= room.name %></td>
@@ -144,7 +144,8 @@
                     <%= room.room_date.strftime("%d. %m. %Y") %>
                   </td>
                   <td class="px-4 py-3 text-white/60 whitespace-nowrap hidden sm:table-cell">
-                    <%=  room.assets.present? ? number_to_currency(room.assets.sum(:purchase_price), strip_insignificant_zeros: true): "Bez majetku" %>
+                    <% assets_sum = room.assets.sum(:purchase_price) %>
+                    <%=  assets_sum > 0 ? number_to_currency(assets_sum, strip_insignificant_zeros: true): "Bez majetku" %>
                   </td>
                   <td class="px-4 py-3 text-right whitespace-nowrap">
                     <%= link_to "Detail →", room_path(room), class: "text-xs text-[#7F77DD] hover:underline" %>

@@ -50,7 +50,7 @@
                 <%= log.created_at.strftime("%d.%m.%y %H:%M") %>
               </td>
               <td class="px-6 py-4 text-white/90">
-                <%= log.user&.email || "Systém" %>
+                <%= log.user.to_s || "Systém" %>
               </td>
               <td class="px-6 py-4">
                   <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase

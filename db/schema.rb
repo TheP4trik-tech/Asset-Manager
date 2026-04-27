@@ -10,7 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_20_213401) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_25_134726) do
+  create_table "action_mailbox_inbound_emails", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "message_checksum", null: false
+    t.string "message_id", null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["message_id", "message_checksum"], name: "index_action_mailbox_inbound_emails_uniqueness", unique: true
+  end
+
+  create_table "action_text_rich_texts", force: :cascade do |t|
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
+    t.datetime "updated_at", null: false
+    t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
+  end
+
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -83,6 +102,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_20_213401) do
     t.string "contact_phone", null: false
     t.datetime "created_at", null: false
     t.string "name", null: false
+    t.integer "rooms_count", default: 0, null: false
     t.string "street"
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
@@ -104,6 +124,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_20_213401) do
 
   create_table "users", force: :cascade do |t|
     t.string "api_key"
+    t.integer "buildings_count", default: 0, null: false
     t.string "code", null: false
     t.datetime "created_at", null: false
     t.string "email", null: false
