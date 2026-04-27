@@ -30,7 +30,10 @@ How to run:
 - Run rails db:migrate
 - Run rails db:seed
 - Run rails s
-- Login either by creating a new user or using the seed data(u = User.last, u.email)
+- Login either by creating a new user or using the seed data:
+do rails c and run: (u = User.last, u.email) to get the email, pass is always 123456
+- Visit http://localhost:3000/
+- 
 
 
 
