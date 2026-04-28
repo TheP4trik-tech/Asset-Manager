@@ -24,14 +24,15 @@ Turbo Frames for AJAX
 Additional Features:
 - API endpoints for assets, buildings, and rooms
 
-How to run:
+How to run the app:
 - Clone the repository
-- Run bundle install
+- Run bundle install (if you don't have bundler installed, run gem install bundler)
 - Run rails db:migrate
 - Run rails db:seed
-- Run rails s
+- Run rails s + rails tailwindcss:build
 - Login either by creating a new user or using the seed data:
 do rails c and run: (u = User.last, u.email) to get the email, pass is always 123456
+if want to switch between roles, u.role = "super_admin" etc
 - Visit http://localhost:3000/
 - 
 
