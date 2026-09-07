@@ -50,6 +50,8 @@ gem "binding_of_caller", "~> 2.0"
 
 gem "jwt", "~> 2.7"
 
+gem "json", "~> 2.0"
+
 
 
 group :development, :test do
