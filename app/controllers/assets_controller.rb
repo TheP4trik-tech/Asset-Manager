@@ -12,7 +12,7 @@ class AssetsController < ApplicationController
     @assets = @q.result(distinct: true).includes(room: :building)
     @pagy, @assets = pagy(@assets, limit: 7)
 
-    @search_params = params[:q]&.permit!
+    @search_params = params[:q]&.permit(:name_cont, :category_id_eq, :status_eq)
     export_path = Rails.root.join("public", "exports", "majetek.csv")
     @export_ready = File.exist?(export_path)
   end
