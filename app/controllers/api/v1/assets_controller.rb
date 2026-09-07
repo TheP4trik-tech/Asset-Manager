@@ -1,9 +1,6 @@
 module Api
   module V1
     class AssetsController < ApiController
-
-
-
       def show
         @asset = Asset.find(params[:id])
         render json: @asset
@@ -36,11 +33,6 @@ module Api
       def asset_params
         params.require(:asset).permit(:name, :room_id, :purchase_date, :last_check_date, :purchase_price, :note)
       end
-
-
-
-
-
     end
   end
 end

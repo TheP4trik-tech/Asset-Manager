@@ -8,5 +8,4 @@ def date_not_in_future?(attribute)
     errors.add(attribute, "can't be in the future")
   end
 end
-
 end

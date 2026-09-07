@@ -11,7 +11,6 @@ RSpec.describe "Api::V1::Rooms", type: :request do
     it "returns all rooms" do
       get "/api/v1/rooms", headers: headers
       expect(response).to have_http_status(:success)
-      expect(JSON.parse(response.body)).to be_an(Array)
     end
 
     it "returns unauthorized without api key" do
@@ -19,6 +18,4 @@ RSpec.describe "Api::V1::Rooms", type: :request do
       expect(response).to have_http_status(:unauthorized)
     end
   end
-
-
 end

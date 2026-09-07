@@ -2,10 +2,8 @@
 require 'rails_helper'
 
 RSpec.describe "asset api", type: :request do
-  let(:user) { create(:user, api_key: 'test_api_key_123') }
+  let(:user) { create(:user) }
   let(:headers) { { 'Authorization' => "Bearer #{user.api_key}" } }
-  # Or depending on your auth implementation:
-  # let(:headers) { { 'X-Api-Key' => user.api_key } }
 
   let!(:asset) { create(:asset) }
 
@@ -16,5 +14,8 @@ RSpec.describe "asset api", type: :request do
     end
   end
 
-
+  it "returns unauthorized without api key" do
+    get "/api/v1/assets"
+    expect(response).to have_http_status(:unauthorized)
+  end
 end

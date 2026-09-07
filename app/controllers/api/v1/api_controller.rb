@@ -1,7 +1,6 @@
   module Api
     module V1
       class ApiController < ActionController::API
-
         include ActionController::HttpAuthentication::Token::ControllerMethods
         before_action :authenticate
 
@@ -18,7 +17,6 @@
             end
           end
         end
-
       end
     end
   end

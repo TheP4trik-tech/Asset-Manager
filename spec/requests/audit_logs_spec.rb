@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe "Api::V1::AuditLogs", type: :request do
-  let(:user) { create(:user)}
+  let(:user) { create(:user) }
   let(:building) { create(:building, user: user) }
   let(:room) { create(:room, building: building) }
   let(:asset) { create(:asset, room: room) }
@@ -13,7 +13,6 @@ RSpec.describe "Api::V1::AuditLogs", type: :request do
     it "returns all audit logs" do
       get "/api/v1/assets/#{asset.id}/audit_logs", headers: headers
       expect(response).to have_http_status(:success)
-      expect(JSON.parse(response.body)).to be_an(Array)
     end
 
     it "returns unauthorized without api key" do

@@ -16,11 +16,11 @@ Rails.application.routes.draw do
   end
 
   resources :users, :buildings, :rooms
-  resources :audit_logs, only: [:index]
+  resources :audit_logs, only: [ :index ]
   resources :assets, path: "assets_mng" do
     get :export, on: :collection
     get :qr_code, on: :member
-    resources :attachments, only: [:create, :destroy]
+    resources :attachments, only: [ :create, :destroy ]
   end
 
   root "users#index"

@@ -13,11 +13,11 @@ class User < ApplicationRecord
 
   has_many :created_audit_logs, class_name: "AuditLog", foreign_key: "user_id", dependent: :destroy
 
-  validates :email, presence: true, uniqueness: true, format: {with: Devise.email_regexp}
+  validates :email, presence: true, uniqueness: true, format: { with: Devise.email_regexp }
   validates :first_name, :last_name, presence: true, length: 2..20
   validates :phone, length: 3..15, allow_blank: true
   validates :code, uniqueness: true, presence: true
-  validates  :role, :api_key, presence: true
+  validates :role, :api_key, presence: true
 
   before_validation :set_api_key, on: :create
 
@@ -35,11 +35,9 @@ class User < ApplicationRecord
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    ["first_name", "last_name", "email", "phone", "role", "created_at", "updated_at", "code"]
+    [ "first_name", "last_name", "email", "phone", "role", "created_at", "updated_at", "code" ]
   end
   def self.ransackable_associations(auth_object = nil)
-    ["assets", "buildings", "rooms"]
+    [ "assets", "buildings", "rooms" ]
   end
-
-
 end

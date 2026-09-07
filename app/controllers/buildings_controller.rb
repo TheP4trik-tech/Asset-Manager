@@ -27,7 +27,7 @@ class BuildingsController < ApplicationController
   def destroy
     @building = Building.find(params[:id])
     @building.destroy
-    redirect_to buildings_path, notice: "Building deleted successfully"
+    redirect_to buildings_path, notice: "Budova smazána"
   end
 
   def create
@@ -36,8 +36,8 @@ class BuildingsController < ApplicationController
 
     if @building.save
       respond_to do |format|
-        format.turbo_stream { redirect_to @building, notice: "Building created successfully" }
-        format.html { redirect_to @building, notice: "Building created successfully" }
+        format.turbo_stream { redirect_to @building, notice: "Budova přidána" }
+        format.html { redirect_to @building, notice: "Budova přidána" }
       end
     else
       @users = User.all
@@ -51,11 +51,11 @@ class BuildingsController < ApplicationController
   respond_to do |format|
     if @building.update(building_params)
       format.turbo_stream
-      format.html { redirect_to @building, notice: "Building updated successfully" }
+      format.html { redirect_to @building, notice: "Budova přidána" }
     else
       format.turbo_stream { render :edit, status: :unprocessable_entity }
       format.html { render :edit, status: :unprocessable_entity }
-      end
+    end
   end
   end
 
@@ -63,7 +63,4 @@ class BuildingsController < ApplicationController
   def building_params
     params.require(:building).permit(:name, :contact_email, :contact_phone, :street, :city, :zip_code, :building_date, :user_id)
   end
-
-
-
 end

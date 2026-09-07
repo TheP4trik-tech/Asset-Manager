@@ -6,9 +6,8 @@ class Attachment < ApplicationRecord
 
 
   validates :added_date, :asset_id, presence: true
-  validates :attachment_type, length: {maximum: 20}
+  validates :attachment_type, length: { maximum: 20 }
   validates :description, length: 0..255
 
-  validate {date_not_in_future?(:added_date)}
-
+  validate { date_not_in_future?(:added_date) }
 end

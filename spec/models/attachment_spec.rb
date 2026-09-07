@@ -14,7 +14,6 @@ RSpec.describe Attachment, type: :model do
   end
 
   it "is not valid with invalid description" do
-
     subject.description = "a" * 290
     expect(subject).not_to be_valid
   end
@@ -29,4 +28,3 @@ RSpec.describe Attachment, type: :model do
     expect(subject).not_to be_valid
     end
   end
-

@@ -1,40 +1,41 @@
 # README
-About
-Ruby on Rails 8 for managing real estate portfolios, buildings, and internal assets.
-This project demonstrates  Rails patterns, including role-based access control, 
-automated audit logs, and complex data relationships.
+1. Splněno
+2. assets/index.html.erb -  20
+   dále new/edit
 
-Hierarchical Data Structure:
-User -> Building -> Room -> Asset(QR,attachments)
+3. assets/index.html.erb  
+   assets_controller.rb - 11
 
-Main Features:
-- User Management
-- Asset Management
-- Asset audit logs
-- Role-Based Access Control
-- Search & CSV export of assets
-- QR Code generation for assets
+4. seeds.rb
 
-Modern approach:
-Web sockets for real-time updates(only in bulding page)
-StimulusJS for dependent select in Asset#edit
-Tailwind CSS for styling
-Turbo Frames for AJAX
+5. csv_export_job.rb
 
-Additional Features:
-- API endpoints for assets, buildings, and rooms
+6. a) assets/show.html.erb 134
+   b) building.rb - 6
 
-How to run the app:
-- Clone the repository
-- Run bundle install (if you don't have bundler installed, run gem install bundler)
-- Run rails db:migrate
-- Run rails db:seed
-- Run rails s + rails tailwindcss:build
-- Login either by creating a new user or using the seed data:
-do rails c and run: (u = User.last, u.email) to get the email, pass is always 123456
-if want to switch between roles, u.role = "super_admin" etc
-- Visit http://localhost:3000/
-- 
+7. a) services/qr.rb
+   b) spec/services/qr_spec.rb
+
+8. a) api/v1/audit_logs_controller.rb - 5
+   b) api/v1/buildings_controller.rb - 4
+   c) api/v1/rooms_controller.rb - 4
+   d) vše v spec/requests
+
+9. a)
+   assets/edit.html.erb - 1
+   assets/show.html.erb - 14
+   b) building.rb - 22, 23, 24
+   c) javascript/controllers/asset_form_controller.js
+   assets/_form_new.html.erb - 76
+
+*bonusová úloha
+QR - services/qr.rb
+CRUD místností/majetku  pro admina - models/ability.rb 16 - 26, Super_admin může přepsat budovu na admina
+a s tím i CRUD na správu vše pod budovou.
+   
+ 
+    
+
 
 
 

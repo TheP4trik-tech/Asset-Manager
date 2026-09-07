@@ -24,10 +24,9 @@ class UsersController < ApplicationController
   private
   def user_params
     if can? :manage, User
-    params.require(:user).permit(:first_name,:last_name, :email, :password, :phone, :password_confirmation, :role)
+    params.require(:user).permit(:first_name, :last_name, :email, :password, :phone, :password_confirmation, :role)
     elsif can? :edit, User
-      params.require(:user).permit(:first_name,:last_name, :email, :phone, :password, :password_confirmation)
+      params.require(:user).permit(:first_name, :last_name, :email, :phone, :password, :password_confirmation)
     end
   end
-
 end

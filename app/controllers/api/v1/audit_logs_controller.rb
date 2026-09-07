@@ -2,14 +2,11 @@ module Api
   module V1
     class AuditLogsController < ApiController
       def index
-        if params[:asset_id].present?
+        def index
           @asset = Asset.find(params[:asset_id])
           @audit_logs = @asset.audit_logs.order(created_at: :desc)
-        else
-          @audit_logs = AuditLog.all.order(created_at: :desc)
+          render json: @audit_logs
         end
-
-        render json: @audit_logs
       end
 
       def show

@@ -1,12 +1,11 @@
 class AttachmentsController < ApplicationController
-
   def create
     @asset = Asset.find(params[:asset_id])
     @attachment = @asset.attachments.build(attachment_params)
     if @attachment.save
-      redirect_to asset_path(@asset), notice: "File uploaded successfully"
+      redirect_to asset_path(@asset), notice: "Soubor přidán"
     else
-      redirect_to asset_path(@asset), alert: "Please fill out all fields"
+      redirect_to asset_path(@asset), alert: "Prosím vyplňte všechna pole"
     end
   end
 

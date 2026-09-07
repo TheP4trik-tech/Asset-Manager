@@ -1,12 +1,11 @@
 class AssetsController < ApplicationController
-  load_and_authorize_resource except: [:qr_code]
+  load_and_authorize_resource except: [ :qr_code ]
   before_action :set_user
 
 
   def show
     @asset = Asset.includes(:room, attachments: :file_attachment).find(params[:id])
     @qr_svg = Qr.call(@asset)
-
   end
   def index
     @q = Asset.ransack(params[:q])
@@ -14,7 +13,7 @@ class AssetsController < ApplicationController
     @pagy, @assets = pagy(@assets, limit: 7)
 
     @search_params = params[:q]&.permit!
-    export_path = Rails.root.join('public', 'exports', 'majetek.csv')
+    export_path = Rails.root.join("public", "exports", "majetek.csv")
     @export_ready = File.exist?(export_path)
   end
   def new
@@ -24,16 +23,18 @@ class AssetsController < ApplicationController
   def create
     properties_for_current_user
     @asset = Asset.new(asset_params)
-    if @asset.save
-      redirect_to @asset
-    else
-      render new_asset_path, notice: "Please fill out all fields",status: :unprocessable_entity
-    end
+    respond_to  do |format|
+      if @asset.save
+      format.turbo_stream { redirect_to asset_path(@asset), notice: "Majetek vytvořen" }
+      format.html { redirect_to asset_path(@asset), notice: "Majetek vytvořen" }
+      else
+        redirect_to new_asset_path, notice: "Vyplňte všechny pole ", status: :unprocessable_entity
+      end
+      end
   end
   def edit
-    @asset = Asset.find(params[:id])
     properties_for_current_user
-
+    @asset = Asset.find(params[:id])
   end
   def update
     if @asset.update(asset_params)
@@ -48,13 +49,12 @@ class AssetsController < ApplicationController
   def destroy
     @asset = Asset.find(params[:id])
     @asset.destroy
-    redirect_to assets_path
   end
 
   def qr_code
     @asset = Asset.find(params[:id])
     svg = Qr.call(@asset)
-    render plain: svg, content_type: 'image/svg+xml'
+    render plain: svg, content_type: "image/svg+xml"
   end
 
   def export

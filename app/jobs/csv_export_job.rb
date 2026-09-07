@@ -1,22 +1,21 @@
-require 'csv'
+require "csv"
 class CsvExportJob < ApplicationJob
   queue_as :delayed
 
   def perform(q_params)
-
     @q = Asset.ransack(q_params)
     @assets = @q.result(distinct: true)
 
     csv_string = CSV.generate do |csv|
-      csv << ["ID","Název", "Kód", "Místo", "Cena", "Datum nákupu", "Datum poslední kontroly",
-              "Popis", "Místnost", "Budova"]
+      csv << [ "ID", "Název", "Kód", "Místo", "Cena", "Datum nákupu", "Datum poslední kontroly",
+              "Popis", "Místnost", "Budova", "Správce" ]
       @assets.each do |asset|
-        csv << [asset.id, asset.name, asset.code, asset.room.building.city,
+        csv << [ asset.id, asset.name, asset.code, asset.room.building.city,
                 asset.purchase_price, asset.purchase_date, asset.last_check_date,
-                asset.note, asset.room.name, asset.room.building.name]
+                asset.note, asset.room.name, asset.room.building.name, asset.room.building.user ]
       end
     end
-    export_path = Rails.root.join('public', 'exports', 'majetek.csv')
+    export_path = Rails.root.join("public", "exports", "majetek.csv")
     FileUtils.mkdir_p(File.dirname(export_path))
     File.write(export_path, csv_string)
   end

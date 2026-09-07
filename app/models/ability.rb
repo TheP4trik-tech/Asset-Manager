@@ -6,7 +6,7 @@ class Ability
 
   def initialize(user)
     # Define abilities for the user here. For example:
-    return unless user
+    return unless user.present?
 
     if user.reader?
     can :read, :all
@@ -14,20 +14,20 @@ class Ability
     end
 
     if user.admin?
-    can  :update, Building, user_id: user.id
-    can :manage, Room, building: {user_id: user.id}
-    can :manage, Asset, room: {building: {user_id: user.id }}
+    can :update, Building, user_id: user.id
+    can :manage, Room, building: { user_id: user.id }
+    can :manage, Asset, room: { building: { user_id: user.id } }
     can :create, Asset
     can :create, Room
     can :edit, User, id: user.id
     can :read, :all
-    can :manage, Attachment, asset: {room: {building: {user_id: user.id }}}
+    can :manage, Attachment, asset: { room: { building: { user_id: user.id } } }
 
     end
 
     if user.super_admin?
       can :manage, :all
-      end
+    end
     # The first argument to `can` is the action you are giving the user
     # permission to do.
     # If you pass :manage it will apply to every action. Other common actions

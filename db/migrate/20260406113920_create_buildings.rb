@@ -9,7 +9,7 @@ class CreateBuildings < ActiveRecord::Migration[8.1]
       t.date :building_date, null: false
       t.string :contact_email, null: false
       t.string :contact_phone, null: false
-      t.references :manager , null: false, foreign_key: { to_table: :users }
+      t.references :manager, null: false, foreign_key: { to_table: :users }
 
       t.timestamps
     end

@@ -84,52 +84,45 @@
         <tbody class="divide-y divide-white/5">
         <% if @assets.any? %>
           <% @assets.each do |asset| %>
-            <tr class="hover:bg-white/5 transition-colors group cursor-pointer"
-                onclick="window.location='<%= asset_path(asset) %>'">
+            <tr class="relative hover:bg-white/5 transition-colors group">
 
               <td class="px-4 py-3 text-white font-medium whitespace-nowrap">
-                <%= asset.name %>
+                <%= link_to asset.name, asset_path(asset), class: "after:absolute after:inset-0", data: { turbo: true } %>
               </td>
 
-              <td class="px-4 py-3 whitespace-nowrap">
-                  <span class="inline-block px-2 py-0.5 rounded-md bg-[#7F77DD]/20 text-[#a9a4ed] font-mono text-xs tracking-wide">
-                    <%= asset.code %>
-                  </span>
+                <td class="px-4 py-3 whitespace-nowrap relative z-10 pointer-events-none">
+                <span class="inline-block px-2 py-0.5 rounded-md bg-[#7F77DD]/20 text-[#a9a4ed] font-mono text-xs tracking-wide">
+                  <%= asset.code %>
+                </span>
               </td>
-
-              <td class="px-4 py-3 text-right whitespace-nowrap font-medium text-[#a9a4ed]">
+              <td class="px-4 py-3 text-right whitespace-nowrap font-medium text-[#a9a4ed] relative z-10 pointer-events-none">
                 <%= asset.purchase_price ? number_to_currency(asset.purchase_price, strip_insignificant_zeros: true) : "—" %>
               </td>
 
-              <td class="px-4 py-3 text-white/70 whitespace-nowrap hidden sm:table-cell">
+              <td class="px-4 py-3 text-white/70 whitespace-nowrap hidden sm:table-cell relative z-10 pointer-events-none">
                 <%= asset.room.name %>
               </td>
 
-              <td class="px-4 py-3 text-white/70 whitespace-nowrap hidden md:table-cell">
+              <td class="px-4 py-3 text-white/70 whitespace-nowrap hidden md:table-cell relative z-10 pointer-events-none">
                 <%= asset.room.building.name %>
               </td>
 
-              <td class="px-4 py-3 text-white/60 whitespace-nowrap hidden lg:table-cell">
+              <td class="px-4 py-3 text-white/60 whitespace-nowrap hidden lg:table-cell relative z-10 pointer-events-none">
                 <%= asset.purchase_date&.strftime("%d. %m. %Y") || "—" %>
               </td>
 
-              <td class="px-4 py-3 text-white/60 whitespace-nowrap hidden xl:table-cell">
+              <td class="px-4 py-3 text-white/60 whitespace-nowrap hidden xl:table-cell relative z-10 pointer-events-none">
                 <%= asset.last_check_date&.strftime("%d. %m. %Y") || "—" %>
               </td>
 
             </tr>
           <% end %>
-        <% else %>
-          <tr>
-            <td colspan="7" class="px-4 py-12 text-center text-white/40 text-sm">
-              Žádný majetek nebyl nalezen.
-            </td>
-          </tr>
         <% end %>
         </tbody>
       </table>
     </div>
     <div><%== @pagy.series_nav %></div>
+
 
   </div>
 </div>

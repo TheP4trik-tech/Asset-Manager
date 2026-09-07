@@ -36,17 +36,17 @@ gem "image_processing", "~> 1.2"
 # gem "rack-cors"
 #
 gem "devise"
-gem 'i18n', '~> 1.14', '>= 1.14.8'
-gem 'devise-i18n'
-gem 'cancancan', '~> 3.5'
-gem 'ransack'
-gem 'stimulus-rails', '~> 1.2', '>= 1.2.1'
+gem "i18n", "~> 1.14", ">= 1.14.8"
+gem "devise-i18n"
+gem "cancancan", "~> 3.5"
+gem "ransack"
+gem "stimulus-rails", "~> 1.2", ">= 1.2.1"
 gem "activestorage"
-gem 'pagy', '~> 43'
+gem "pagy", "~> 43"
 gem "rqrcode", "~> 3.0"
-gem 'bullet', '~> 8.1', '>= 8.1.1'
-gem 'better_errors', '~> 2.9', '>= 2.9.1'
-gem 'binding_of_caller', '~> 2.0'
+gem "bullet", "~> 8.1", ">= 8.1.1"
+gem "better_errors", "~> 2.9", ">= 2.9.1"
+gem "binding_of_caller", "~> 2.0"
 
 
 group :development, :test do
@@ -70,5 +70,3 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
 end
-
-

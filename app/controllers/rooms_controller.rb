@@ -6,7 +6,6 @@ class RoomsController < ApplicationController
     @q = Room.ransack(params[:q])
     @rooms = @q.result(distinct: true).includes(:building, :assets)
     @pagy, @rooms = pagy(@rooms, limit: 7)
-
   end
   def show
     @room = Room.includes(:assets, :building).find(params[:id])
@@ -22,7 +21,7 @@ class RoomsController < ApplicationController
     if @room.save
       redirect_to @room
     else
-      render new_room_path, notice: "Please fill out all fields",status: :unprocessable_entity
+      render new_room_path, notice: "Prosím vyplňte všechna pole", status: :unprocessable_entity
     end
   end
   def edit
@@ -35,7 +34,7 @@ class RoomsController < ApplicationController
     if @room.update(room_params)
       redirect_to @room
     else
-      render :new, notice: "Please fill out all fields",status: :unprocessable_entity
+      render :new, notice: "Prosím vyplňte všechny pole", status: :unprocessable_entity
     end
   end
   def destroy
@@ -57,6 +56,4 @@ class RoomsController < ApplicationController
       @buildings = current_user.buildings
     end
   end
-
-
 end
