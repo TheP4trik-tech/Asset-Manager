@@ -1,4 +1,8 @@
 # README
+run docker docker compose up --build 
+
+
+Zadání
 1. Splněno
 2. assets/index.html.erb -  20
    dále new/edit
