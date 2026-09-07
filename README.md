@@ -1,6 +1,6 @@
 # README
-run docker docker compose up --build 
-
+run docker docker compose up --build
+Complete assigment -> RoR_II_zadani.pdf
 
 Zadání
 1. Splněno
