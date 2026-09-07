@@ -48,6 +48,10 @@ gem "bullet", "~> 8.1", ">= 8.1.1"
 gem "better_errors", "~> 2.9", ">= 2.9.1"
 gem "binding_of_caller", "~> 2.0"
 
+gem "jwt", "~> 2.7"
+gem "bcrypt", "~> 3.1.7"
+
+
 
 group :development, :test do
   gem "faker"

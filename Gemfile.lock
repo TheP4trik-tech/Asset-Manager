@@ -162,6 +162,8 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     json (2.19.3)
+    jwt (2.10.3)
+      base64
     kamal (2.11.0)
       activesupport (>= 7.0)
       base64 (~> 0.2)
@@ -447,6 +449,7 @@ PLATFORMS
 
 DEPENDENCIES
   activestorage
+  bcrypt (~> 3.1.7)
   better_errors (~> 2.9, >= 2.9.1)
   binding_of_caller (~> 2.0)
   bootsnap
@@ -462,6 +465,7 @@ DEPENDENCIES
   i18n (~> 1.14, >= 1.14.8)
   image_processing (~> 1.2)
   importmap-rails
+  jwt (~> 2.7)
   kamal
   pagy (~> 43)
   propshaft
@@ -544,6 +548,7 @@ CHECKSUMS
   io-console (0.8.2) sha256=d6e3ae7a7cc7574f4b8893b4fca2162e57a825b223a177b7afa236c5ef9814cc
   irb (1.17.0) sha256=168c4ddb93d8a361a045c41d92b2952c7a118fa73f23fe14e55609eb7a863aae
   json (2.19.3) sha256=289b0bb53052a1fa8c34ab33cc750b659ba14a5c45f3fcf4b18762dc67c78646
+  jwt (2.10.3) sha256=e4d9352fbc7309b1a7448c7dd713dfe4d8c47077af80759cdbed8f878ea0b484
   kamal (2.11.0) sha256=1408864425e0dec7e0a14d712a3b13f614e9f3a425b7661d3f9d287a51d7dd75
   language_server-protocol (3.17.0.5) sha256=fd1e39a51a28bf3eec959379985a72e296e9f9acfce46f6a79d31ca8760803cc
   lint_roller (1.1.0) sha256=2c0c845b632a7d172cb849cc90c1bce937a28c5c8ccccb50dfd46a485003cc87
